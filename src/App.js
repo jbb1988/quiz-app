@@ -6,14 +6,17 @@ import Quiz from './components/Quiz/Quiz';
 import Progress from './components/Progress/Progress';
 import Profile from './components/Profile/Profile';
 import Layout from './components/Layout/Layout';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 import { allCourses } from './data/courses';
 
-// Mock user data - in a real app, this would come from a backend
-const MOCK_USER = {
-  id: 'user123',
-  name: 'Test User',
-  email: 'test@example.com',
-  progress: {}
+// Protected Route wrapper
+const ProtectedRoute = ({ children }) => {
+  const currentUser = JSON.parse(localStorage.getItem('marsCurrentUser'));
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+  return children;
 };
 
 const CourseViewWrapper = ({ onQuizSelect }) => {
@@ -29,14 +32,31 @@ const CourseViewWrapper = ({ onQuizSelect }) => {
 
 function App() {
   const [currentQuiz, setCurrentQuiz] = useState(null);
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('marsUser');
-    return savedUser ? JSON.parse(savedUser) : MOCK_USER;
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem('marsCurrentUser');
+    return savedUser ? JSON.parse(savedUser) : null;
   });
 
   useEffect(() => {
-    localStorage.setItem('marsUser', JSON.stringify(user));
-  }, [user]);
+    if (currentUser) {
+      localStorage.setItem('marsCurrentUser', JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem('marsCurrentUser');
+    }
+  }, [currentUser]);
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+  };
+
+  const handleRegister = (user) => {
+    setCurrentUser(user);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setCurrentQuiz(null);
+  };
 
   const handleQuizSelect = (courseId, quiz) => {
     setCurrentQuiz({
@@ -50,11 +70,14 @@ function App() {
     const quizId = currentQuiz.id;
     const courseId = currentQuiz.courseId;
     
-    setUser(prevUser => {
-      const newProgress = {
-        ...prevUser.progress,
+    // Update user progress
+    const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
+    const updatedUser = {
+      ...currentUser,
+      progress: {
+        ...currentUser.progress,
         [courseId]: {
-          ...prevUser.progress[courseId],
+          ...currentUser.progress[courseId],
           [quizId]: {
             completed: true,
             score,
@@ -62,63 +85,88 @@ function App() {
             completedAt: new Date().toISOString()
           }
         }
-      };
+      }
+    };
 
-      return {
-        ...prevUser,
-        progress: newProgress
-      };
-    });
-
+    // Update both current user and users storage
+    users[currentUser.email] = updatedUser;
+    localStorage.setItem('marsUsers', JSON.stringify(users));
+    setCurrentUser(updatedUser);
     setCurrentQuiz(null);
   };
 
+  if (!currentUser) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/register" element={<Register onRegister={handleRegister} />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    );
+  }
+
   return (
     <Router>
-      <Layout>
+      <Layout onLogout={handleLogout}>
         <Routes>
           <Route 
             path="/" 
             element={
-              <Dashboard 
-                courses={allCourses}
-                userProgress={user.progress}
-              />
+              <ProtectedRoute>
+                <Dashboard 
+                  courses={allCourses}
+                  userProgress={currentUser.progress}
+                />
+              </ProtectedRoute>
             } 
           />
           <Route 
             path="/course/:courseId" 
             element={
-              <CourseViewWrapper 
-                onQuizSelect={handleQuizSelect}
-                userProgress={user.progress}
-              />
+              <ProtectedRoute>
+                <CourseViewWrapper 
+                  onQuizSelect={handleQuizSelect}
+                  userProgress={currentUser.progress}
+                />
+              </ProtectedRoute>
             }
           />
           <Route 
             path="/quiz" 
             element={
-              currentQuiz ? (
-                <Quiz 
-                  quiz={currentQuiz}
-                  courseName={currentQuiz.courseName}
-                  onComplete={handleQuizComplete}
-                  previousAttempt={
-                    user.progress[currentQuiz.courseId]?.[currentQuiz.id]
-                  }
-                />
-              ) : (
-                <Navigate to="/" />
-              )
+              <ProtectedRoute>
+                {currentQuiz ? (
+                  <Quiz 
+                    quiz={currentQuiz}
+                    courseName={currentQuiz.courseName}
+                    onComplete={handleQuizComplete}
+                    previousAttempt={
+                      currentUser.progress[currentQuiz.courseId]?.[currentQuiz.id]
+                    }
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )}
+              </ProtectedRoute>
             }
           />
           <Route 
             path="/profile" 
-            element={<Profile user={user} />}
+            element={
+              <ProtectedRoute>
+                <Profile user={currentUser} />
+              </ProtectedRoute>
+            }
           />
           <Route 
             path="/progress" 
-            element={<Progress userProgress={user.progress} />}
+            element={
+              <ProtectedRoute>
+                <Progress userProgress={currentUser.progress} />
+              </ProtectedRoute>
+            }
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
