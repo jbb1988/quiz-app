@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { questions, shuffleArray } from '../../data/questions';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { shuffleArray } from '../../utils/array';
 import Question from './Question';
 import Results from './Results';
 
 const TIME_LIMIT = 30; // seconds per question
 const TIME_BONUS_FACTOR = 1.67; // 50 points max time bonus (30 seconds * 1.67 = 50)
 
-const Quiz = () => {
+const Quiz = ({ quiz, onComplete }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -15,13 +15,37 @@ const Quiz = () => {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [timeBonus, setTimeBonus] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
+  const timerRef = useRef(null);
 
-  useEffect(() => {
-    startNewQuiz();
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   }, []);
 
-  const startNewQuiz = () => {
-    setShuffledQuestions(shuffleArray(questions));
+  const startTimer = useCallback(() => {
+    clearTimer();
+    setTimeLeft(TIME_LIMIT);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearTimer();
+          if (!selectedAnswer && !showFeedback) {
+            setSelectedAnswer('');
+            setShowFeedback(true);
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [clearTimer, selectedAnswer, showFeedback]);
+
+  const startNewQuiz = useCallback(() => {
+    setShuffledQuestions(shuffleArray(quiz.questions));
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
     setShowFeedback(false);
@@ -29,9 +53,23 @@ const Quiz = () => {
     setCorrectAnswers(0);
     setTimeBonus(0);
     setQuizComplete(false);
-  };
+    startTimer();
+  }, [quiz, startTimer]);
 
-  const handleAnswerSelect = (answer, timeLeft) => {
+  useEffect(() => {
+    startNewQuiz();
+    return clearTimer;
+  }, [startNewQuiz, clearTimer]);
+
+  // Pause timer during feedback
+  useEffect(() => {
+    if (showFeedback) {
+      clearTimer();
+    }
+  }, [showFeedback, clearTimer]);
+
+  const handleAnswerSelect = (answer) => {
+    clearTimer();
     setSelectedAnswer(answer);
     setShowFeedback(true);
 
@@ -43,21 +81,10 @@ const Quiz = () => {
       // Base score of 100 points per correct answer
       setScore(prev => prev + 100);
       // Add time bonus for correct answers
-      calculateTimeBonus(timeLeft);
+      const bonus = Math.round(timeLeft * TIME_BONUS_FACTOR);
+      setTimeBonus(prev => prev + bonus);
+      setScore(prev => prev + bonus);
     }
-  };
-
-  const handleTimeUp = useCallback(() => {
-    if (!selectedAnswer) {
-      setSelectedAnswer('');
-      setShowFeedback(true);
-    }
-  }, [selectedAnswer]);
-
-  const calculateTimeBonus = (timeLeft) => {
-    const bonus = Math.round(timeLeft * TIME_BONUS_FACTOR);
-    setTimeBonus(prev => prev + bonus);
-    setScore(prev => prev + bonus);
   };
 
   const handleNextQuestion = () => {
@@ -65,9 +92,19 @@ const Quiz = () => {
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowFeedback(false);
+      startTimer();
     } else {
       setQuizComplete(true);
     }
+  };
+
+  const handleRestartQuiz = () => {
+    startNewQuiz();
+  };
+
+  const handleFinishQuiz = () => {
+    clearTimer();
+    onComplete();
   };
 
   if (!shuffledQuestions.length) {
@@ -78,19 +115,24 @@ const Quiz = () => {
     return (
       <Results
         score={score}
-        totalQuestions={questions.length}
+        totalQuestions={quiz.questions.length}
         correctAnswers={correctAnswers}
         timeBonus={timeBonus}
-        onRestart={startNewQuiz}
+        onRestart={handleRestartQuiz}
+        onFinish={handleFinishQuiz}
       />
     );
   }
 
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const progress = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
 
   return (
     <div className="container">
+      <div className="text-center mb-4">
+        <h2 className="text-2xl font-bold text-primary mb-2">{quiz.title}</h2>
+      </div>
+
       <div className="progress">
         <div 
           className="progress-bar"
@@ -104,17 +146,17 @@ const Quiz = () => {
 
       <div className="text-center mb-4">
         <p className="text-text-light">
-          Question {currentQuestionIndex + 1} of {questions.length}
+          Question {currentQuestionIndex + 1} of {quiz.questions.length}
         </p>
       </div>
 
       <Question
+        key={currentQuestion.id}
         question={currentQuestion}
         selectedAnswer={selectedAnswer}
         onSelectAnswer={handleAnswerSelect}
         showFeedback={showFeedback}
-        timeLimit={TIME_LIMIT}
-        onTimeUp={handleTimeUp}
+        timeLeft={timeLeft}
       />
 
       {showFeedback && (
@@ -123,12 +165,12 @@ const Quiz = () => {
             className="btn btn-primary"
             onClick={handleNextQuestion}
             aria-label={
-              currentQuestionIndex < questions.length - 1
+              currentQuestionIndex < quiz.questions.length - 1
                 ? "Next Question"
                 : "Show Results"
             }
           >
-            {currentQuestionIndex < questions.length - 1
+            {currentQuestionIndex < quiz.questions.length - 1
               ? "Next Question"
               : "Show Results"}
           </button>

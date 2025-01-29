@@ -1,7 +1,7 @@
 import React from 'react';
-import { FaTrophy, FaClock, FaCheck } from 'react-icons/fa';
+import { FaTrophy, FaClock, FaCheck, FaHome } from 'react-icons/fa';
 
-const Results = ({ score, totalQuestions, correctAnswers, timeBonus, onRestart }) => {
+const Results = ({ score, totalQuestions, correctAnswers, timeBonus, onRestart, onFinish }) => {
   const percentage = Math.round((correctAnswers / totalQuestions) * 100);
   const baseScore = correctAnswers * 100;
 
@@ -46,9 +46,18 @@ const Results = ({ score, totalQuestions, correctAnswers, timeBonus, onRestart }
         <button 
           className="btn btn-primary"
           onClick={onRestart}
-          aria-label="Restart Quiz"
+          aria-label="Try Again"
         >
           Try Again
+        </button>
+        
+        <button 
+          className="btn btn-outline"
+          onClick={onFinish}
+          aria-label="Back to Quiz Selection"
+        >
+          <FaHome className="mr-2" />
+          Back to Quiz Selection
         </button>
         
         <button 

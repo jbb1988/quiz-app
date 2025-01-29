@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import Timer from './Timer';
 
@@ -6,20 +6,9 @@ const Question = ({
   question, 
   selectedAnswer, 
   onSelectAnswer, 
-  showFeedback, 
-  timeLimit,
-  onTimeUp 
+  showFeedback,
+  timeLeft
 }) => {
-  const [currentTime, setCurrentTime] = useState(timeLimit);
-
-  const handleAnswerSelect = (option) => {
-    onSelectAnswer(option, currentTime);
-  };
-
-  const handleTimeChange = useCallback((time) => {
-    setCurrentTime(time);
-  }, []);
-
   const getOptionClass = (option) => {
     if (!showFeedback) {
       return classNames('option', {
@@ -40,11 +29,7 @@ const Question = ({
 
   return (
     <div className="card">
-      <Timer 
-        duration={timeLimit} 
-        onTimeUp={onTimeUp}
-        onTimeChange={handleTimeChange}
-      />
+      <Timer timeLeft={timeLeft} />
       
       <h2 className="text-xl font-bold mb-4">{question.question}</h2>
       
@@ -53,7 +38,7 @@ const Question = ({
           <button
             key={index}
             className={getOptionClass(option)}
-            onClick={() => !showFeedback && handleAnswerSelect(option)}
+            onClick={() => !showFeedback && onSelectAnswer(option)}
             disabled={showFeedback}
             aria-selected={option === selectedAnswer}
             role="option"
@@ -80,4 +65,4 @@ const Question = ({
   );
 };
 
-export default Question;
+export default React.memo(Question);
