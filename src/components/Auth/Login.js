@@ -1,103 +1,68 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../../styles/components/Auth.css';
 
 const Login = ({ onLogin }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false
-  });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    setError('');
-  };
-
-  const handleBlur = (e) => {
-    setTouched({
-      ...touched,
-      [e.target.name]: true
-    });
+    // Clear error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({
+        ...errors,
+        [e.target.name]: ''
+      });
+    }
   };
 
   const validateForm = () => {
-    if (!formData.email.trim()) {
-      setError('Please enter your email');
-      return false;
-    }
-    if (!formData.email.includes('@')) {
-      setError('Please enter a valid email address');
-      return false;
+    const newErrors = {};
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
     }
     if (!formData.password) {
-      setError('Please enter your password');
-      return false;
+      newErrors.password = 'Password is required';
     }
-    return true;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTouched({
-      email: true,
-      password: true
-    });
-    
-    if (!validateForm()) {
+    if (!validateForm()) return;
+
+    const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
+    const user = users[formData.email];
+
+    if (!user || user.password !== formData.password) {
+      setErrors({
+        ...errors,
+        auth: 'Invalid email or password'
+      });
       return;
     }
 
-    try {
-      const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
-      
-      if (users[formData.email]) {
-        if (users[formData.email].password === formData.password) {
-          localStorage.setItem('marsCurrentUser', JSON.stringify(users[formData.email]));
-          onLogin(users[formData.email]);
-          navigate('/');
-        } else {
-          setError('Invalid password');
-        }
-      } else {
-        setError('No account found with this email');
-      }
-    } catch (err) {
-      setError('Failed to sign in. Please try again.');
-    }
-  };
-
-  const getValidationMessage = (field) => {
-    if (!touched[field]) return '';
-    
-    switch (field) {
-      case 'email':
-        if (!formData.email.trim()) return 'Email is required';
-        if (!formData.email.includes('@')) return 'Please enter a valid email';
-        return '';
-      case 'password':
-        if (!formData.password) return 'Password is required';
-        return '';
-      default:
-        return '';
-    }
+    localStorage.setItem('marsCurrentUser', JSON.stringify(user));
+    onLogin(user);
   };
 
   return (
-    <div className="auth-form-container">
-      <div className="auth-form">
-        <h1>Welcome to MARS Learning</h1>
-        <p>Sign in to continue your training</p>
-        
-        <form onSubmit={handleSubmit} noValidate>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1>Welcome to MARS Learning</h1>
+          <p>Sign in to continue your training</p>
+        </div>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Email</label>
             <input
@@ -105,17 +70,16 @@ const Login = ({ onLogin }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              onBlur={handleBlur}
-              className={`form-input ${touched.email && getValidationMessage('email') ? 'invalid' : ''}`}
               placeholder="Enter your email"
-              autoComplete="email"
-              required
+              className={errors.email ? 'error' : ''}
             />
-            {touched.email && getValidationMessage('email') && (
-              <div className="validation-message">{getValidationMessage('email')}</div>
+            {errors.email && (
+              <div className="error-message">
+                ⚠ {errors.email}
+              </div>
             )}
           </div>
-          
+
           <div className="form-group">
             <label>Password</label>
             <input
@@ -123,43 +87,33 @@ const Login = ({ onLogin }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              onBlur={handleBlur}
-              className={`form-input ${touched.password && getValidationMessage('password') ? 'invalid' : ''}`}
               placeholder="Enter your password"
-              autoComplete="current-password"
-              required
+              className={errors.password ? 'error' : ''}
             />
-            {touched.password && getValidationMessage('password') && (
-              <div className="validation-message">{getValidationMessage('password')}</div>
+            {errors.password && (
+              <div className="error-message">
+                ⚠ {errors.password}
+              </div>
             )}
           </div>
 
-          {error && (
-            <div className="error">
-              {error}
+          {errors.auth && (
+            <div className="error-message auth-error">
+              ⚠ {errors.auth}
             </div>
           )}
-          
+
           <button type="submit" className="btn btn-primary">
             Sign In
           </button>
+
+          <div className="auth-links">
+            <p>
+              Don't have an account?{' '}
+              <Link to="/register">Register here</Link>
+            </p>
+          </div>
         </form>
-
-        <div className="auth-links">
-          <p>Don't have an account?</p>
-          <button
-            onClick={() => navigate('/register')}
-            className="btn btn-outline"
-          >
-            Create Account
-          </button>
-        </div>
-
-        <div className="terms-text">
-          <p>
-            By signing in, you agree to MARS Learning's Terms of Service and Privacy Policy.
-          </p>
-        </div>
       </div>
     </div>
   );
