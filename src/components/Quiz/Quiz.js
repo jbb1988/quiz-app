@@ -35,7 +35,7 @@ const Quiz = ({ quiz, courseName, onComplete }) => {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [showFeedback, handleAnswerSubmit]);
+  }, [showFeedback, currentQuestionIndex, quiz.questions.length]);
 
   const handleTimerComplete = (bonusPoints) => {
     setTimeBonus(bonusPoints);
@@ -105,13 +105,13 @@ const Quiz = ({ quiz, courseName, onComplete }) => {
 
         <div className="p-6">
           <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4">{currentQuestion.question}</h2>
-            <div className="space-y-4">
+            <h2 className="text-xl font-bold mb-6">{currentQuestion.question}</h2>
+            <div className="flex flex-col gap-4">
               {currentQuestion.options.map((option, index) => (
                 <button
                   key={index}
                   onClick={() => !showFeedback && handleAnswerSubmit(option)}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200
+                  className={`w-full text-left px-6 py-4 rounded-lg transition-all duration-200 border-2
                     ${showFeedback 
                       ? option === currentQuestion.correctAnswer
                         ? 'border-success bg-success bg-opacity-10 text-success'
