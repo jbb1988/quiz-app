@@ -23,7 +23,6 @@ const Dashboard = ({ onQuizSelect }) => {
     setSelectedCourse(null);
   };
 
-  // If a course is selected, show the CourseView
   if (selectedCourse) {
     return (
       <div className="dashboard">
@@ -31,10 +30,11 @@ const Dashboard = ({ onQuizSelect }) => {
           <div className="flex items-center gap-8">
             <img src={marsLogo} alt="MARS Company" className="dashboard-logo" />
             <button 
-              className="btn btn-outline"
+              className="btn btn-outline flex items-center gap-2"
               onClick={handleBackToCourses}
             >
-              ← Back to Courses
+              <span>←</span>
+              <span>Back to Courses</span>
             </button>
           </div>
           <button className="btn btn-primary">My Progress</button>
@@ -47,7 +47,8 @@ const Dashboard = ({ onQuizSelect }) => {
               {selectedCourse.modules.map(module => (
                 <li key={module.id}>
                   <button
-                    className="w-full text-left p-2 rounded hover:bg-background"
+                    className="w-full text-left p-3 rounded hover:bg-background"
+                    style={{ color: courseCategories[selectedCourse.category].color }}
                   >
                     {module.title}
                   </button>
@@ -67,7 +68,6 @@ const Dashboard = ({ onQuizSelect }) => {
     );
   }
 
-  // Otherwise show the course listing
   return (
     <div className="dashboard">
       <header className="dashboard-header">
@@ -90,7 +90,9 @@ const Dashboard = ({ onQuizSelect }) => {
                   }`}
                   style={{ 
                     color: category.color,
-                    backgroundColor: selectedCategory === category.id ? `${category.color}10` : 'transparent'
+                    background: selectedCategory === category.id 
+                      ? `linear-gradient(135deg, ${category.color}10 0%, ${category.color}05 100%)`
+                      : 'transparent'
                   }}
                   onClick={() => setSelectedCategory(category.id)}
                 >
@@ -112,31 +114,46 @@ const Dashboard = ({ onQuizSelect }) => {
           .filter(([categoryId]) => !selectedCategory || categoryId === selectedCategory)
           .map(([categoryId, categoryCourses]) => (
             <section key={categoryId} className="mb-8">
-              <h2 className="text-xl font-bold mb-4" style={{ color: courseCategories[categoryId].color }}>
+              <h2 
+                className="text-xl font-bold mb-4"
+                style={{ color: courseCategories[categoryId].color }}
+              >
                 {courseCategories[categoryId].name}
               </h2>
               <div className="course-grid">
                 {categoryCourses.map(course => (
                   <div 
                     key={course.id} 
-                    className="course-card cursor-pointer"
+                    className="course-card"
                     onClick={() => handleCourseSelect(course)}
                   >
                     <div 
                       className="course-card-header"
-                      style={{ backgroundColor: courseCategories[course.category].color }}
+                      style={{ 
+                        background: `linear-gradient(135deg, ${courseCategories[course.category].color} 0%, ${courseCategories[course.category].color}dd 100%)`
+                      }}
                     >
-                      <h3 className="font-bold">{course.title}</h3>
+                      <div>
+                        <h3 className="font-bold text-lg mb-1">{course.title}</h3>
+                        {course.subtitle && (
+                          <p className="text-sm opacity-90">{course.subtitle}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="course-card-body">
                       <p className="text-text-light">{course.description}</p>
                       <div className="course-card-footer">
-                        <span className="text-sm font-medium" style={{ color: courseCategories[course.category].color }}>
-                          {course.modules?.length || 0} modules
+                        <span 
+                          className="text-sm font-medium"
+                          style={{ color: courseCategories[course.category].color }}
+                        >
+                          {course.modules?.length || 0} {course.modules?.length === 1 ? 'module' : 'modules'}
                         </span>
                         <button 
                           className="btn btn-primary"
-                          style={{ backgroundColor: courseCategories[course.category].color }}
+                          style={{ 
+                            background: `linear-gradient(135deg, ${courseCategories[course.category].color} 0%, ${courseCategories[course.category].color}dd 100%)`
+                          }}
                         >
                           Start Learning
                         </button>

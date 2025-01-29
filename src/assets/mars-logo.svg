@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="200" height="40" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .logo-text { font-family: Arial, sans-serif; font-weight: bold; }
-    .primary { fill: #008ACC; }
-    .secondary { fill: #004F87; }
-  </style>
-  <text x="10" y="30" class="logo-text primary" font-size="32">MARS</text>
-  <circle cx="170" cy="20" r="15" class="secondary"/>
+<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#008ACC"/>
+      <stop offset="100%" style="stop-color:#004F87"/>
+    </linearGradient>
+  </defs>
+  <text x="10" y="28" font-family="Inter, sans-serif" font-weight="700" font-size="24" fill="url(#logoGradient)">MARS</text>
+  <circle cx="90" cy="20" r="8" fill="url(#logoGradient)"/>
 </svg>
