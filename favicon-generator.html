@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Favicon Generator</title>
+</head>
+<body>
+  <canvas id="favicon16" width="16" height="16"></canvas>
+  <canvas id="favicon32" width="32" height="32"></canvas>
+  <canvas id="favicon48" width="48" height="48"></canvas>
+  <script>
+    function drawFavicon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      
+      // Background
+      ctx.fillStyle = '#2563eb';
+      ctx.fillRect(0, 0, size, size);
+      
+      // Quiz text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${size * 0.6}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Q', size/2, size/2);
+    }
+
+    // Draw favicons
+    [16, 32, 48].forEach(size => {
+      const canvas = document.getElementById(`favicon${size}`);
+      drawFavicon(canvas, size);
+    });
+
+    // Combine into multi-size .ico file
+    const canvas16 = document.getElementById('favicon16');
+    const canvas32 = document.getElementById('favicon32');
+    const canvas48 = document.getElementById('favicon48');
+
+    const link = document.createElement('a');
+    link.download = 'favicon.ico';
+    
+    // Use the 32x32 version as favicon.ico
+    link.href = canvas32.toDataURL('image/x-icon');
+    link.click();
+  </script>
+</body>
+</html>
