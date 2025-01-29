@@ -5,6 +5,7 @@ import CourseView from './components/Dashboard/CourseView';
 import Quiz from './components/Quiz/Quiz';
 import Progress from './components/Progress/Progress';
 import Profile from './components/Profile/Profile';
+import Layout from './components/Layout/Layout';
 import { allCourses } from './data/courses';
 
 // Mock user data - in a real app, this would come from a backend
@@ -74,52 +75,54 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route 
-          path="/" 
-          element={
-            <Dashboard 
-              courses={allCourses}
-              userProgress={user.progress}
-            />
-          } 
-        />
-        <Route 
-          path="/course/:courseId" 
-          element={
-            <CourseViewWrapper 
-              onQuizSelect={handleQuizSelect}
-              userProgress={user.progress}
-            />
-          }
-        />
-        <Route 
-          path="/quiz" 
-          element={
-            currentQuiz ? (
-              <Quiz 
-                quiz={currentQuiz}
-                courseName={currentQuiz.courseName}
-                onComplete={handleQuizComplete}
-                previousAttempt={
-                  user.progress[currentQuiz.courseId]?.[currentQuiz.id]
-                }
+      <Layout>
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <Dashboard 
+                courses={allCourses}
+                userProgress={user.progress}
               />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-        <Route 
-          path="/profile" 
-          element={<Profile user={user} />}
-        />
-        <Route 
-          path="/progress" 
-          element={<Progress userProgress={user.progress} />}
-        />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+            } 
+          />
+          <Route 
+            path="/course/:courseId" 
+            element={
+              <CourseViewWrapper 
+                onQuizSelect={handleQuizSelect}
+                userProgress={user.progress}
+              />
+            }
+          />
+          <Route 
+            path="/quiz" 
+            element={
+              currentQuiz ? (
+                <Quiz 
+                  quiz={currentQuiz}
+                  courseName={currentQuiz.courseName}
+                  onComplete={handleQuizComplete}
+                  previousAttempt={
+                    user.progress[currentQuiz.courseId]?.[currentQuiz.id]
+                  }
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route 
+            path="/profile" 
+            element={<Profile user={user} />}
+          />
+          <Route 
+            path="/progress" 
+            element={<Progress userProgress={user.progress} />}
+          />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
