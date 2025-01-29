@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .mars-text { font-family: Arial, sans-serif; font-weight: 900; letter-spacing: -1px; }
+    .company-text { font-family: Arial, sans-serif; font-weight: 500; letter-spacing: 2px; }
+  </style>
+  <text x="0" y="35" class="mars-text" font-size="45" fill="#000000">MARS</text>
+  <text x="0" y="48" class="company-text" font-size="14" fill="#666666">COMPANY</text>
+  <g transform="translate(150, 5)">
+    <circle cx="20" cy="20" r="20" fill="#008ACC"/>
+    <path d="M20 0 Q35 10 35 20 Q35 30 20 40 Q5 30 5 20 Q5 10 20 0Z" fill="#004F87"/>
+    <path d="M20 5 Q32 13 32 20 Q32 27 20 35 Q8 27 8 20 Q8 13 20 5Z" fill="#008ACC"/>
+  </g>
+</svg>
