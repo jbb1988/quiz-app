@@ -63,6 +63,7 @@ body {
   border: none;
   outline: none;
   min-width: 120px;
+  height: 36px;
 }
 
 .btn-primary {
@@ -122,6 +123,7 @@ body {
   transition: all 0.2s ease;
   text-align: left;
   font-size: 1rem;
+  width: 100%;
 }
 
 .option:hover:not(:disabled) {
@@ -195,10 +197,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 64px;
 }
 
 .dashboard-logo {
   height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 .dashboard-sidebar {
@@ -225,6 +230,10 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 250px;
 }
 
 .course-card-header {
@@ -235,6 +244,22 @@ body {
 
 .course-card-body {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.course-card-body p {
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.course-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  margin-top: auto;
 }
 
 .module-list {
@@ -252,4 +277,56 @@ body {
 
 .module-item:last-child {
   border-bottom: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-text-light {
+  color: var(--color-text-light);
 }

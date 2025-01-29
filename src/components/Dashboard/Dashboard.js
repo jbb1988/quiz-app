@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { courses, courseCategories } from '../../styles/theme';
-import { m3SoftwareCourse } from '../../data/courses/m3-software';
 import marsLogo from '../../assets/mars-logo.svg';
 import CourseView from './CourseView';
-
-// Add the M3 Software course to our courses
-courses.m3_software = m3SoftwareCourse;
 
 const Dashboard = ({ onQuizSelect }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -130,8 +126,8 @@ const Dashboard = ({ onQuizSelect }) => {
                       <h3 className="font-bold">{course.title}</h3>
                     </div>
                     <div className="course-card-body">
-                      <p className="text-text-light mb-4">{course.description}</p>
-                      <div className="flex justify-between items-center">
+                      <p className="text-text-light">{course.description}</p>
+                      <div className="course-card-footer">
                         <span className="text-sm text-text-light">
                           {course.modules?.length || 0} modules
                         </span>

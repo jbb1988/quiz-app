@@ -69,10 +69,15 @@ export const courseCategories = {
     name: 'Company & Culture',
     color: '#2B6CB0',
   },
-  certification: {
-    id: 'certification',
-    name: 'Certifications',
+  mcc: {
+    id: 'mcc',
+    name: 'MCC',
     color: '#2C5282',
+  },
+  sales: {
+    id: 'sales',
+    name: 'Sales',
+    color: '#2A4365',
   },
 };
 
@@ -83,49 +88,86 @@ export const courses = {
     category: 'software',
     description: 'Learn about MARS Meter Management software suite',
     modules: [
-      // Add modules here
-    ],
-  },
-  mars_test_bench: {
-    id: 'mars_test_bench',
-    title: 'MARS Test Bench Training',
-    category: 'hardware',
-    description: 'Comprehensive training for MARS Test Bench operation',
-    modules: [],
-  },
-  mcc: {
-    id: 'mcc',
-    title: 'MCC (MARS Calibration & Certification)',
-    category: 'certification',
-    description: 'MARS Calibration and Certification procedures',
-    modules: [],
-  },
-  mars_agreements: {
-    id: 'mars_agreements',
-    title: 'MARS Agreements',
-    category: 'company',
-    description: 'Understanding MARS company agreements and policies',
-    modules: [],
+      {
+        id: 'introduction',
+        title: 'Introduction to M3',
+        description: 'Overview of MARS Meter Management software',
+        quizzes: [
+          {
+            id: 'intro_system',
+            title: 'Introduction to M3 System',
+            description: 'Learn the fundamentals of the M3 system',
+          },
+          {
+            id: 'login_user_management',
+            title: 'Logging In and User Management',
+            description: 'Understanding user access and management',
+          }
+        ]
+      },
+      {
+        id: 'core_features',
+        title: 'Core Features',
+        description: 'Essential M3 functionalities',
+        quizzes: [
+          {
+            id: 'database_tools',
+            title: 'Database Tools & Editing Remarks/Job Numbers',
+            description: 'Working with database tools and job management',
+          },
+          {
+            id: 'test_operations',
+            title: 'Test Operations & Execution',
+            description: 'Managing and executing tests in M3',
+          },
+          {
+            id: 'meter_parameters',
+            title: 'Meter Parameters Management',
+            description: 'Configuring and managing meter parameters',
+          }
+        ]
+      },
+      {
+        id: 'advanced_features',
+        title: 'Advanced Features',
+        description: 'Advanced M3 capabilities',
+        quizzes: [
+          {
+            id: 'reporting_analytics',
+            title: 'Reporting, Analytics, and Exporting Data',
+            description: 'Working with reports and data analysis',
+          },
+          {
+            id: 'troubleshooting',
+            title: 'Troubleshooting & Error Resolution',
+            description: 'Resolving common issues in M3',
+          },
+          {
+            id: 'system_maintenance',
+            title: 'Data Backup, Security, and System Maintenance',
+            description: 'System maintenance and security practices',
+          },
+          {
+            id: 'advanced_customization',
+            title: 'Advanced Features and Customization',
+            description: 'Customizing M3 for specific needs',
+          }
+        ]
+      }
+    ]
   },
   notion_101: {
     id: 'notion_101',
     title: 'Notion 101',
     category: 'software',
     description: 'Getting started with Notion at MARS',
-    modules: [],
-  },
-  company_overview: {
-    id: 'company_overview',
-    title: 'MARS Company Overview',
-    category: 'company',
-    description: 'Introduction to MARS Company culture and values',
-    modules: [],
+    modules: []
   },
   strategic_selling: {
     id: 'strategic_selling',
     title: 'MARS Strategic Selling',
-    category: 'company',
+    category: 'sales',
     description: 'Learn about MARS sales strategies and methodologies',
-    modules: [],
-  },
+    modules: []
+  }
 };
