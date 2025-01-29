@@ -84,13 +84,13 @@
 .course-card-header {
   padding: 1.5rem;
   background: var(--gradient-primary);
-  color: white;
 }
 
 .course-card-header h3,
 .course-card-header p,
-.course-card-header div {
-  color: white;
+.course-card-header div,
+.course-card-header span {
+  color: white !important;
 }
 
 .course-card-body {
