@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/components/Layout.css';
 
@@ -14,14 +14,34 @@ const Layout = ({ children }) => {
     progress: {}
   };
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [menuOpen]);
+
   const handleLogout = () => {
     localStorage.removeItem('marsCurrentUser');
+    setMenuOpen(false);
     navigate('/login');
   };
 
   const completedCourses = Object.values(user.progress || {}).filter(
     course => course.completed
   ).length;
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleOverlayClick = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <div className="app">
@@ -30,7 +50,7 @@ const Layout = ({ children }) => {
           <header className="header">
             <button 
               className="hamburger-menu"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={handleMenuToggle}
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
             >
@@ -77,19 +97,19 @@ const Layout = ({ children }) => {
             </div>
 
             <nav className="side-nav">
-              <Link to="/" className="menu-item">
+              <Link to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-home"></i>
                 <span>Home</span>
               </Link>
-              <Link to="/" className="menu-item">
+              <Link to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-book"></i>
                 <span>Courses</span>
               </Link>
-              <Link to="/profile" className="menu-item">
+              <Link to="/profile" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-user"></i>
                 <span>Profile</span>
               </Link>
-              <Link to="/progress" className="menu-item">
+              <Link to="/progress" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-chart-line"></i>
                 <span>Progress</span>
               </Link>
@@ -104,13 +124,11 @@ const Layout = ({ children }) => {
             </div>
           </div>
 
-          {menuOpen && (
-            <div 
-              className="overlay" 
-              onClick={() => setMenuOpen(false)}
-              aria-hidden="true"
-            />
-          )}
+          <div 
+            className={`overlay ${menuOpen ? 'visible' : ''}`}
+            onClick={handleOverlayClick}
+            aria-hidden="true"
+          />
         </>
       )}
       <main className={`main ${isAuthPage ? 'auth-page' : ''}`}>
