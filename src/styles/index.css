@@ -29,10 +29,17 @@
   --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -44,8 +51,13 @@ body {
     linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   background-attachment: fixed;
   color: var(--color-text-primary);
-  line-height: 1.5;
   min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Auth Forms */
@@ -70,10 +82,12 @@ body {
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 28rem;
+  position: relative;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .form-group label {
@@ -81,6 +95,7 @@ body {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: var(--color-text-secondary);
+  font-size: 0.875rem;
 }
 
 .form-input {
@@ -107,6 +122,7 @@ body {
 
 .form-input.error {
   border-color: var(--color-error);
+  background-color: rgba(245, 101, 101, 0.05);
 }
 
 .form-input.error:focus {
@@ -128,6 +144,14 @@ body {
   gap: 0.5rem;
   border: 1px solid rgba(245, 101, 101, 0.2);
   box-shadow: 0 2px 4px rgba(245, 101, 101, 0.1);
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
 .error:before {
@@ -143,6 +167,7 @@ body {
   height: auto;
   margin-top: 1.5rem;
   transition: all var(--transition-default);
+  cursor: pointer;
 }
 
 .auth-form .btn-primary {
@@ -189,8 +214,6 @@ body {
   content: "ℹ️";
   font-size: 0.875rem;
 }
-
-/* ... [Rest of the CSS remains unchanged] ... */
 
 /* Utility classes */
 .flex { display: flex; }
