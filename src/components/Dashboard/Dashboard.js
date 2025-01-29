@@ -26,10 +26,14 @@ const Dashboard = ({ courses, userProgress }) => {
   return (
     <div className="dashboard">
       <aside className="dashboard-sidebar">
-        <nav className="flex flex-col gap-2">
+        <div className="mb-4 font-bold text-lg">Categories</div>
+        <nav className="flex flex-col space-y-2">
           <button
-            className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200 border border-transparent
-              ${!selectedCategory ? 'bg-primary bg-opacity-10 text-primary border-primary' : 'hover:bg-gray-50'}
+            className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
+              ${!selectedCategory 
+                ? 'bg-primary bg-opacity-10 text-primary border-primary' 
+                : 'border-transparent hover:bg-gray-50'
+              }
             `}
             onClick={() => setSelectedCategory(null)}
           >
@@ -39,10 +43,10 @@ const Dashboard = ({ courses, userProgress }) => {
             <button
               key={id}
               onClick={() => handleCategoryClick(id)}
-              className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200 border border-transparent
+              className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
                 ${selectedCategory === id 
                   ? 'bg-opacity-10 border-current' 
-                  : 'hover:bg-gray-50'
+                  : 'border-transparent hover:bg-gray-50'
                 }
               `}
               style={{
