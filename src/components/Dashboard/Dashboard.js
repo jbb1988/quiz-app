@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
 
-const Dashboard = ({ courses }) => {
+const Dashboard = ({ courses, userProgress }) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
   
@@ -14,9 +14,14 @@ const Dashboard = ({ courses }) => {
     setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
   };
 
-  const filteredCourses = Object.entries(courses).filter(([_, course]) => 
-    !selectedCategory || course.category === selectedCategory
-  );
+  const categorizedCourses = Object.entries(courses).reduce((acc, [id, course]) => {
+    const category = course.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push({ id, ...course });
+    return acc;
+  }, {});
 
   return (
     <div className="dashboard">
@@ -61,10 +66,7 @@ const Dashboard = ({ courses }) => {
               key={id}
               onClick={() => handleCategoryClick(id)}
               className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200
-                ${selectedCategory === id 
-                  ? `bg-opacity-10 text-${category.color}`
-                  : 'hover:bg-gray-50'
-                }
+                ${selectedCategory === id ? 'bg-opacity-10' : 'hover:bg-gray-50'}
               `}
               style={{
                 backgroundColor: selectedCategory === id ? `${category.color}20` : '',
@@ -85,20 +87,18 @@ const Dashboard = ({ courses }) => {
 
         <div className="space-y-12">
           {Object.entries(courseCategories).map(([categoryId, category]) => {
-            const categoryCourses = filteredCourses.filter(([_, course]) => 
-              course.category === categoryId
-            );
+            const coursesInCategory = categorizedCourses[categoryId] || [];
 
             if (!selectedCategory || selectedCategory === categoryId) {
-              return categoryCourses.length > 0 ? (
+              return coursesInCategory.length > 0 ? (
                 <div key={categoryId}>
                   <h2 className="text-xl font-bold mb-6">{category.name}</h2>
                   <div className="course-grid">
-                    {categoryCourses.map(([id, course]) => (
+                    {coursesInCategory.map(course => (
                       <div
-                        key={id}
+                        key={course.id}
                         className="course-card"
-                        onClick={() => handleCourseClick(id)}
+                        onClick={() => handleCourseClick(course.id)}
                       >
                         <div 
                           className="course-card-header"
