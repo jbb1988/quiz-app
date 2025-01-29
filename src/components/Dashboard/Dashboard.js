@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
-import marsLogo from '../../assets/mars-logo.svg';
 
 const Dashboard = ({ courses, onCourseSelect }) => {
   const categorizedCourses = Object.entries(courses).reduce((acc, [id, course]) => {
@@ -17,16 +15,13 @@ const Dashboard = ({ courses, onCourseSelect }) => {
     <div className="dashboard">
       <header className="dashboard-header">
         <div className="flex items-center gap-4">
-          <img 
-            src={marsLogo} 
-            alt="MARS Company" 
-            className="dashboard-logo"
-            style={{ height: '40px', width: 'auto' }}
-          />
+          <div className="text-2xl font-bold text-primary">
+            MARS Learning
+          </div>
         </div>
         <div className="flex items-center gap-4">
-          <Link to="/profile" className="btn btn-outline">Profile</Link>
-          <Link to="/progress" className="btn btn-primary">My Progress</Link>
+          <button className="btn btn-outline">Profile</button>
+          <button className="btn btn-primary">My Progress</button>
         </div>
       </header>
 
