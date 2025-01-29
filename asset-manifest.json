@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/quiz-app/static/css/main.c14d9390.css",
-    "main.js": "/quiz-app/static/js/main.70adc464.js",
+    "main.css": "/quiz-app/static/css/main.107af749.css",
+    "main.js": "/quiz-app/static/js/main.f2866cda.js",
     "static/js/453.fc01f49c.chunk.js": "/quiz-app/static/js/453.fc01f49c.chunk.js",
     "index.html": "/quiz-app/index.html",
-    "static/media/mars-logo.svg": "/quiz-app/static/media/mars-logo.2fdb2cb067ec196d2289b13c2e1939eb.svg",
-    "main.c14d9390.css.map": "/quiz-app/static/css/main.c14d9390.css.map",
-    "main.70adc464.js.map": "/quiz-app/static/js/main.70adc464.js.map",
+    "static/media/mars-logo.svg": "/quiz-app/static/media/mars-logo.c54498ee9e288c96eee063cb0a060035.svg",
+    "main.107af749.css.map": "/quiz-app/static/css/main.107af749.css.map",
+    "main.f2866cda.js.map": "/quiz-app/static/js/main.f2866cda.js.map",
     "453.fc01f49c.chunk.js.map": "/quiz-app/static/js/453.fc01f49c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c14d9390.css",
-    "static/js/main.70adc464.js"
+    "static/css/main.107af749.css",
+    "static/js/main.f2866cda.js"
   ]
 }
