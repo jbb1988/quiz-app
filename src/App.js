@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
@@ -50,7 +50,7 @@ const App = () => {
   }
 
   return (
-    <Router basename="/quiz-app">
+    <Router>
       <Layout>
         <Routes>
           <Route path="/login" element={<Navigate to="/" replace />} />
