@@ -3,6 +3,8 @@ import { HashRouter as Router, Routes, Route, Navigate, useParams } from 'react-
 import Dashboard from './components/Dashboard/Dashboard';
 import CourseView from './components/Dashboard/CourseView';
 import Quiz from './components/Quiz/Quiz';
+import Progress from './components/Progress/Progress';
+import Profile from './components/Profile/Profile';
 import { allCourses } from './data/courses';
 
 // Mock user data - in a real app, this would come from a backend
@@ -110,75 +112,11 @@ function App() {
         />
         <Route 
           path="/profile" 
-          element={
-            <div className="container py-8 max-w-2xl mx-auto">
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <h1 className="text-2xl font-bold mb-6">Profile</h1>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm text-text-light">Name</label>
-                    <div className="font-medium">{user.name}</div>
-                  </div>
-                  <div>
-                    <label className="text-sm text-text-light">Email</label>
-                    <div className="font-medium">{user.email}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
+          element={<Profile user={user} />}
         />
         <Route 
           path="/progress" 
-          element={
-            <div className="container py-8 max-w-3xl mx-auto">
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <h1 className="text-2xl font-bold mb-6">My Progress</h1>
-                <div className="space-y-8">
-                  {Object.entries(allCourses).map(([courseId, course]) => {
-                    const courseProgress = user.progress[courseId];
-                    if (!courseProgress) return null;
-
-                    const completedQuizzes = Object.values(courseProgress).length;
-                    const totalQuizzes = course.modules.reduce(
-                      (total, module) => total + module.quizzes.length,
-                      0
-                    );
-                    const averageScore = Object.values(courseProgress).reduce(
-                      (sum, quiz) => sum + (quiz.score / quiz.totalQuestions) * 100,
-                      0
-                    ) / completedQuizzes;
-
-                    return (
-                      <div key={courseId} className="border-b pb-6">
-                        <h2 className="text-xl font-bold mb-4">{course.title}</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="text-sm text-text-light mb-1">Completed</div>
-                            <div className="text-xl font-bold">
-                              {completedQuizzes}/{totalQuizzes}
-                            </div>
-                          </div>
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="text-sm text-text-light mb-1">Average Score</div>
-                            <div className="text-xl font-bold">
-                              {averageScore.toFixed(1)}%
-                            </div>
-                          </div>
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <div className="text-sm text-text-light mb-1">Status</div>
-                            <div className="text-xl font-bold">
-                              {completedQuizzes === totalQuizzes ? 'Complete' : 'In Progress'}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          }
+          element={<Progress userProgress={user.progress} />}
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
