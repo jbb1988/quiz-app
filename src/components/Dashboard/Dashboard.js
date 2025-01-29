@@ -28,54 +28,45 @@ const Dashboard = ({ courses, userProgress }) => {
       <aside className="dashboard-sidebar">
         <div className="mb-6">
           <h2 className="text-lg font-bold mb-4">Categories</h2>
-          <nav className="space-y-2">
-            <button
-              className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
-                ${!selectedCategory 
-                  ? 'bg-primary bg-opacity-10 text-primary border-primary' 
-                  : 'border-transparent hover:bg-gray-50'
-                }
-              `}
-              onClick={() => setSelectedCategory(null)}
-            >
-              All Courses
-            </button>
-            {Object.entries(courseCategories).map(([id, category]) => (
+          <ul className="categories-list">
+            <li>
               <button
-                key={id}
-                onClick={() => handleCategoryClick(id)}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
-                  ${selectedCategory === id 
-                    ? 'bg-opacity-10 border-current' 
-                    : 'border-transparent hover:bg-gray-50'
-                  }
-                `}
-                style={{
-                  backgroundColor: selectedCategory === id ? `${category.color}20` : '',
-                  color: selectedCategory === id ? category.color : 'var(--color-text-primary)',
-                  borderColor: selectedCategory === id ? category.color : 'transparent'
-                }}
+                className={`category-button ${!selectedCategory ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(null)}
               >
-                {category.name}
+                All Courses
               </button>
+            </li>
+            {Object.entries(courseCategories).map(([id, category]) => (
+              <li key={id}>
+                <button
+                  onClick={() => handleCategoryClick(id)}
+                  className={`category-button ${selectedCategory === id ? 'active' : ''}`}
+                  style={{
+                    backgroundColor: selectedCategory === id ? category.color : '',
+                    color: selectedCategory === id ? 'white' : 'var(--color-text-primary)'
+                  }}
+                >
+                  {category.name}
+                </button>
+              </li>
             ))}
-          </nav>
+          </ul>
         </div>
       </aside>
 
       <main className="dashboard-main">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-2">Welcome to MARS Learning</h1>
-          <p className="text-text-light">Select a course to begin your training</p>
+          <h1 className="text-2xl font-bold mb-2">Select a course to begin your training</h1>
         </div>
 
-        <div className="space-y-12">
+        <div className="space-y-8">
           {Object.entries(courseCategories).map(([categoryId, category]) => {
             const coursesInCategory = categorizedCourses[categoryId] || [];
 
             if (!selectedCategory || selectedCategory === categoryId) {
               return coursesInCategory.length > 0 ? (
-                <div key={categoryId} className="space-y-6">
+                <div key={categoryId} className="space-y-4">
                   <h2 className="text-xl font-bold">{category.name}</h2>
                   <div className="course-grid">
                     {coursesInCategory.map(course => (
@@ -105,7 +96,7 @@ const Dashboard = ({ courses, userProgress }) => {
                                 background: courseCategories[course.category].gradient
                               }}
                             >
-                              Start Learning
+                              Start
                             </button>
                           </div>
                         </div>

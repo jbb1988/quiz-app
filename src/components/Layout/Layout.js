@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Layout = ({ children, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = JSON.parse(localStorage.getItem('marsCurrentUser'));
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -16,40 +17,57 @@ const Layout = ({ children, onLogout }) => {
   return (
     <div className="min-h-screen bg-background-light">
       <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div 
-            className="text-2xl font-bold text-primary cursor-pointer"
-            onClick={() => navigate('/')}
-          >
-            MARS Learning
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+          <div className="text-sm text-text-light">
+            Welcome, {currentUser?.name}
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-text-light mr-4">
-              Welcome, {currentUser?.name}
-            </div>
+          <div className="relative">
             <button 
-              className={`btn ${isActive('/profile') ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => navigate('/profile')}
+              className="hamburger-menu p-2"
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              Profile
+              <div className="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </button>
-            <button 
-              className={`btn ${isActive('/progress') ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => navigate('/progress')}
-            >
-              My Progress
-            </button>
-            <button 
-              className="btn btn-outline text-error border-error hover:bg-error hover:text-white"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            {menuOpen && (
+              <div className="menu-dropdown">
+                <button 
+                  className={`menu-item ${isActive('/profile') ? 'active' : ''}`}
+                  onClick={() => {
+                    navigate('/profile');
+                    setMenuOpen(false);
+                  }}
+                >
+                  Profile
+                </button>
+                <button 
+                  className={`menu-item ${isActive('/progress') ? 'active' : ''}`}
+                  onClick={() => {
+                    navigate('/progress');
+                    setMenuOpen(false);
+                  }}
+                >
+                  My Progress
+                </button>
+                <button 
+                  className="menu-item text-error"
+                  onClick={() => {
+                    handleLogout();
+                    setMenuOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>
 
-      <main className="min-h-[calc(100vh-72px)]">
+      <main className="min-h-[calc(100vh-64px)]">
         {children}
       </main>
 

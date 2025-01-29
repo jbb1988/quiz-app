@@ -104,38 +104,30 @@ const Quiz = ({ quiz, courseName, onComplete }) => {
         </div>
 
         <div className="p-6">
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-6">{currentQuestion.question}</h2>
-            <div className="flex flex-col gap-4">
-              {currentQuestion.options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => !showFeedback && handleAnswerSubmit(option)}
-                  className={`w-full text-left px-6 py-4 rounded-lg transition-all duration-200 border-2
-                    ${showFeedback 
-                      ? option === currentQuestion.correctAnswer
-                        ? 'border-success bg-success bg-opacity-10 text-success'
-                        : option === currentQuestion.options[index]
-                          ? 'border-error bg-error bg-opacity-10 text-error'
-                          : 'border-transparent'
-                      : 'border-gray-200 hover:border-primary hover:bg-primary hover:bg-opacity-5'
-                    }
-                  `}
-                  disabled={showFeedback}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
+          <h2 className="text-xl font-bold mb-6">{currentQuestion.question}</h2>
+          <div className="quiz-options">
+            {currentQuestion.options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => !showFeedback && handleAnswerSubmit(option)}
+                className={`quiz-option ${
+                  showFeedback
+                    ? option === currentQuestion.correctAnswer
+                      ? 'correct'
+                      : option === currentQuestion.options[index]
+                        ? 'incorrect'
+                        : ''
+                    : ''
+                }`}
+                disabled={showFeedback}
+              >
+                {option}
+              </button>
+            ))}
           </div>
 
           {showFeedback && (
-            <div className={`p-4 rounded-lg mb-4 text-center
-              ${isCorrect 
-                ? 'bg-success bg-opacity-10 text-success'
-                : 'bg-error bg-opacity-10 text-error'
-              }
-            `}>
+            <div className={`quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}`}>
               {isCorrect ? 'Correct!' : 'Incorrect. The correct answer is: ' + currentQuestion.correctAnswer}
             </div>
           )}
