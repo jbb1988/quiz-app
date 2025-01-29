@@ -26,7 +26,7 @@ const Dashboard = ({ courses, userProgress }) => {
   return (
     <div className="dashboard">
       <aside className="dashboard-sidebar">
-        <nav className="space-y-4">
+        <nav className="flex flex-col gap-2">
           <button
             className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200 border border-transparent
               ${!selectedCategory ? 'bg-primary bg-opacity-10 text-primary border-primary' : 'hover:bg-gray-50'}
@@ -69,7 +69,8 @@ const Dashboard = ({ courses, userProgress }) => {
 
             if (!selectedCategory || selectedCategory === categoryId) {
               return coursesInCategory.length > 0 ? (
-                <div key={categoryId}>
+                <div key={categoryId} className="space-y-6">
+                  <h2 className="text-xl font-bold">{category.name}</h2>
                   <div className="course-grid">
                     {coursesInCategory.map(course => (
                       <div
