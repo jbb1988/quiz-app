@@ -136,8 +136,14 @@ export const salesCourse = {
   ]
 };
 
+// Update M3 Software course category
+const updatedM3SoftwareCourse = {
+  ...m3SoftwareCourse,
+  category: 'software'
+};
+
 export const allCourses = {
-  m3_software: m3SoftwareCourse,
+  m3_software: updatedM3SoftwareCourse,
   hardware_training: hardwareTrainingCourse,
   company_culture: companyCultureCourse,
   mcc_training: mccCourse,
