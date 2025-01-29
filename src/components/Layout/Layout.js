@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/components/Layout.css';
 
 const Layout = ({ children }) => {
@@ -39,11 +39,6 @@ const Layout = ({ children }) => {
     setMenuOpen(false);
   };
 
-  const handleNavigation = (path) => {
-    setMenuOpen(false);
-    navigate(path);
-  };
-
   return (
     <div className="app">
       {!isAuthPage && (
@@ -58,14 +53,14 @@ const Layout = ({ children }) => {
               <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
             </button>
             <nav className="top-nav">
-              <button onClick={() => handleNavigation('/')} className="nav-button">
+              <Link to="/" className="nav-button">
                 <i className="fas fa-home"></i>
                 <span>Home</span>
-              </button>
-              <button onClick={() => handleNavigation('/')} className="nav-button">
+              </Link>
+              <Link to="/" className="nav-button">
                 <i className="fas fa-book"></i>
                 <span>Courses</span>
-              </button>
+              </Link>
             </nav>
             <div className="user-info">
               <span>Welcome, {user.name}</span>
@@ -98,22 +93,22 @@ const Layout = ({ children }) => {
             </div>
 
             <nav className="side-nav">
-              <button onClick={() => handleNavigation('/')} className="menu-item">
+              <Link to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-home"></i>
                 <span>Home</span>
-              </button>
-              <button onClick={() => handleNavigation('/')} className="menu-item">
+              </Link>
+              <Link to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-book"></i>
                 <span>Courses</span>
-              </button>
-              <button onClick={() => handleNavigation('/profile')} className="menu-item">
+              </Link>
+              <Link to="/profile" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-user"></i>
                 <span>Profile</span>
-              </button>
-              <button onClick={() => handleNavigation('/progress')} className="menu-item">
+              </Link>
+              <Link to="/progress" className="menu-item" onClick={() => setMenuOpen(false)}>
                 <i className="fas fa-chart-line"></i>
                 <span>Progress</span>
-              </button>
+              </Link>
             </nav>
 
             <div className="menu-footer">
