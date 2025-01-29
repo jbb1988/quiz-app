@@ -8,6 +8,7 @@ const Login = ({ onLogin }) => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [touchedFields, setTouchedFields] = useState({});
 
   const handleChange = (e) => {
     setFormData({
@@ -16,6 +17,13 @@ const Login = ({ onLogin }) => {
     });
     // Clear error when user starts typing
     setError('');
+  };
+
+  const handleBlur = (field) => {
+    setTouchedFields({
+      ...touchedFields,
+      [field]: true
+    });
   };
 
   const validateForm = () => {
@@ -60,6 +68,14 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const getInputClassName = (field) => {
+    const baseClass = 'form-input';
+    if (touchedFields[field] && !formData[field]) {
+      return `${baseClass} error`;
+    }
+    return baseClass;
+  };
+
   return (
     <div className="auth-form-container">
       <div className="auth-form">
@@ -69,7 +85,7 @@ const Login = ({ onLogin }) => {
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="form-group">
+          <div className="form-group required">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Email
             </label>
@@ -78,14 +94,15 @@ const Login = ({ onLogin }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-input"
+              onBlur={() => handleBlur('email')}
+              className={getInputClassName('email')}
               placeholder="Enter your email"
               required
               autoComplete="email"
             />
           </div>
           
-          <div className="form-group">
+          <div className="form-group required">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Password
             </label>
@@ -94,7 +111,8 @@ const Login = ({ onLogin }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="form-input"
+              onBlur={() => handleBlur('password')}
+              className={getInputClassName('password')}
               placeholder="Enter your password"
               required
               autoComplete="current-password"

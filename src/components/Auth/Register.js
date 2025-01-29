@@ -10,6 +10,7 @@ const Register = ({ onRegister }) => {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [touchedFields, setTouchedFields] = useState({});
 
   const handleChange = (e) => {
     setFormData({
@@ -18,6 +19,13 @@ const Register = ({ onRegister }) => {
     });
     // Clear error when user starts typing
     setError('');
+  };
+
+  const handleBlur = (field) => {
+    setTouchedFields({
+      ...touchedFields,
+      [field]: true
+    });
   };
 
   const validateForm = () => {
@@ -87,6 +95,14 @@ const Register = ({ onRegister }) => {
     }
   };
 
+  const getInputClassName = (field) => {
+    const baseClass = 'form-input';
+    if (touchedFields[field] && !formData[field]) {
+      return `${baseClass} error`;
+    }
+    return baseClass;
+  };
+
   return (
     <div className="auth-form-container">
       <div className="auth-form">
@@ -96,7 +112,7 @@ const Register = ({ onRegister }) => {
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="form-group">
+          <div className="form-group required">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Full Name
             </label>
@@ -105,14 +121,15 @@ const Register = ({ onRegister }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="form-input"
+              onBlur={() => handleBlur('name')}
+              className={getInputClassName('name')}
               placeholder="Enter your full name"
               required
               autoComplete="name"
             />
           </div>
           
-          <div className="form-group">
+          <div className="form-group required">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Email
             </label>
@@ -121,14 +138,15 @@ const Register = ({ onRegister }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-input"
+              onBlur={() => handleBlur('email')}
+              className={getInputClassName('email')}
               placeholder="Enter your email"
               required
               autoComplete="email"
             />
           </div>
           
-          <div className="form-group">
+          <div className="form-group required">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Password
             </label>
@@ -137,18 +155,19 @@ const Register = ({ onRegister }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="form-input"
+              onBlur={() => handleBlur('password')}
+              className={getInputClassName('password')}
               placeholder="Create a password"
               required
               minLength={6}
               autoComplete="new-password"
             />
-            <p className="mt-2 text-xs text-text-light">
+            <p className="form-hint">
               Must be at least 6 characters long
             </p>
           </div>
 
-          <div className="form-group">
+          <div className="form-group required">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Confirm Password
             </label>
@@ -157,7 +176,8 @@ const Register = ({ onRegister }) => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="form-input"
+              onBlur={() => handleBlur('confirmPassword')}
+              className={getInputClassName('confirmPassword')}
               placeholder="Confirm your password"
               required
               minLength={6}
