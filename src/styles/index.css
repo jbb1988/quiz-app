@@ -203,6 +203,104 @@ body {
   min-width: 0;
 }
 
+.course-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.course-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 280px;
+  transition: var(--transition-default);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(0, 138, 204, 0.1);
+}
+
+.course-card-header {
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.course-card-header h3,
+.course-card-header p {
+  color: white !important;
+  position: relative;
+  z-index: 1;
+}
+
+.course-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background: var(--gradient-card);
+}
+
+.course-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-default);
+  border: none;
+  outline: none;
+  min-width: 120px;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  color: white;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
 /* Utility classes */
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -213,6 +311,7 @@ body {
 .text-center { text-align: center; }
 .mb-2 { margin-bottom: 0.5rem; }
 .mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
 .mb-8 { margin-bottom: 2rem; }
 .mt-4 { margin-top: 1rem; }
 .mt-8 { margin-top: 2rem; }
