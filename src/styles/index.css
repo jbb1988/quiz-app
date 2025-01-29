@@ -18,60 +18,64 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
 }
 
 /* Auth Form */
 .auth-form {
   background: white;
-  padding: 2.5rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   width: 100%;
   max-width: 28rem;
 }
 
 /* Form Title */
 .auth-form h1 {
-  font-size: 1.875rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #008ACC;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
 .auth-form > p {
   color: #718096;
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
+  font-size: 1rem;
 }
 
 /* Form */
 .auth-form form {
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 /* Form Groups */
 .form-group {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .form-group label {
   display: block;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #4a5568;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.025em;
 }
 
 /* Form Inputs */
 .form-input {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: all 0.2s;
+  background-color: #fff;
 }
 
 .form-input:focus {
@@ -88,21 +92,22 @@ body {
 .form-hint {
   font-size: 0.75rem;
   color: #718096;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 /* Buttons */
 .btn {
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 1.25rem;
   border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
-  margin-top: 2rem;
+  margin-top: 3rem;
+  letter-spacing: 0.025em;
 }
 
 .btn-primary {
@@ -112,8 +117,8 @@ body {
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .btn-outline {
@@ -132,11 +137,13 @@ body {
 .error {
   background-color: #fff5f5;
   color: #e53e3e;
-  padding: 0.875rem 1rem;
+  padding: 1rem;
   border-radius: 0.5rem;
-  margin: 1.5rem 0;
+  margin: 2rem 0;
   text-align: center;
   font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(229, 62, 62, 0.1);
 }
 
 /* Utility Classes */
@@ -145,7 +152,7 @@ body {
 }
 
 .mt-8 {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .text-sm {
@@ -155,6 +162,6 @@ body {
 /* Border */
 .border-t {
   border-top: 1px solid #e2e8f0;
-  padding-top: 1.5rem;
-  margin-top: 1.5rem;
+  padding-top: 2rem;
+  margin-top: 2rem;
 }
