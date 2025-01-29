@@ -26,22 +26,26 @@ const Quiz = ({ user }) => {
   }, [course, module, quiz, navigate]);
 
   const handleAnswer = (answer) => {
-    setAnswers([...answers, answer]);
-    
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      completeQuiz();
-    }
+    const newAnswers = [...answers, answer];
+    setAnswers(newAnswers);
+
+    // Add a delay to show feedback before moving to next question
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        completeQuiz(newAnswers);
+      }
+    }, 1500);
   };
 
   const handleTimeExpired = () => {
     setTimeExpired(true);
-    completeQuiz();
+    completeQuiz(answers);
   };
 
-  const completeQuiz = () => {
-    const score = answers.reduce((total, answer, index) => {
+  const completeQuiz = (finalAnswers) => {
+    const score = finalAnswers.reduce((total, answer, index) => {
       return total + (answer === questions[index].correctAnswer ? 1 : 0);
     }, 0);
 
