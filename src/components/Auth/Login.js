@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/components/Auth.css';
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ const Login = ({ onLogin }) => {
               onChange={handleChange}
               className="form-input"
               placeholder="Enter your email"
+              autoComplete="email"
               required
             />
           </div>
@@ -78,6 +80,7 @@ const Login = ({ onLogin }) => {
               onChange={handleChange}
               className="form-input"
               placeholder="Enter your password"
+              autoComplete="current-password"
               required
             />
           </div>
@@ -93,7 +96,7 @@ const Login = ({ onLogin }) => {
           </button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="auth-links">
           <p>Don't have an account?</p>
           <button
             onClick={() => navigate('/register')}
@@ -103,8 +106,8 @@ const Login = ({ onLogin }) => {
           </button>
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-sm">
+        <div className="terms-text">
+          <p>
             By signing in, you agree to MARS Learning's Terms of Service and Privacy Policy.
           </p>
         </div>

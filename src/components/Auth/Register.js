@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/components/Auth.css';
 
 const Register = ({ onRegister }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Register = ({ onRegister }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (!formData.name.trim()) {
       setError('Please enter your name');
       return;
@@ -35,35 +36,30 @@ const Register = ({ onRegister }) => {
       setError('Please enter a password');
       return;
     }
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
-      return;
-    }
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
-    
-    if (users[formData.email]) {
-      setError('User already exists with this email');
-      return;
-    }
-
-    const newUser = {
-      id: `user_${Date.now()}`,
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      progress: {},
-      createdAt: new Date().toISOString()
-    };
-
     try {
+      const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
+      
+      if (users[formData.email]) {
+        setError('An account with this email already exists');
+        return;
+      }
+
+      const newUser = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        progress: {}
+      };
+
       users[formData.email] = newUser;
       localStorage.setItem('marsUsers', JSON.stringify(users));
       localStorage.setItem('marsCurrentUser', JSON.stringify(newUser));
+      
       onRegister(newUser);
       navigate('/');
     } catch (err) {
@@ -79,18 +75,19 @@ const Register = ({ onRegister }) => {
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Full Name</label>
+            <label>Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               className="form-input"
-              placeholder="Enter your full name"
+              placeholder="Enter your name"
+              autoComplete="name"
               required
             />
           </div>
-          
+
           <div className="form-group">
             <label>Email</label>
             <input
@@ -100,6 +97,7 @@ const Register = ({ onRegister }) => {
               onChange={handleChange}
               className="form-input"
               placeholder="Enter your email"
+              autoComplete="email"
               required
             />
           </div>
@@ -113,10 +111,9 @@ const Register = ({ onRegister }) => {
               onChange={handleChange}
               className="form-input"
               placeholder="Create a password"
+              autoComplete="new-password"
               required
-              minLength={6}
             />
-            <p className="form-hint">Must be at least 6 characters long</p>
           </div>
 
           <div className="form-group">
@@ -128,8 +125,8 @@ const Register = ({ onRegister }) => {
               onChange={handleChange}
               className="form-input"
               placeholder="Confirm your password"
+              autoComplete="new-password"
               required
-              minLength={6}
             />
           </div>
 
@@ -144,7 +141,7 @@ const Register = ({ onRegister }) => {
           </button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="auth-links">
           <p>Already have an account?</p>
           <button
             onClick={() => navigate('/login')}
@@ -154,8 +151,8 @@ const Register = ({ onRegister }) => {
           </button>
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-sm">
+        <div className="terms-text">
+          <p>
             By creating an account, you agree to MARS Learning's Terms of Service and Privacy Policy.
           </p>
         </div>
