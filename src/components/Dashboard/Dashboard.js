@@ -1,5 +1,6 @@
 import React from 'react';
 import { allCourses } from '../../data/courses';
+import { courseCategories } from '../../styles/theme';
 import CourseView from './CourseView';
 import '../../styles/components/Dashboard.css';
 
