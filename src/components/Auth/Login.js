@@ -33,7 +33,10 @@ const Login = ({ onLogin }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background-light">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold mb-6 text-center">Welcome to MARS Learning</h1>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-primary mb-2">Welcome to MARS Learning</h1>
+          <p className="text-text-light">Sign in to continue your training</p>
+        </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -44,8 +47,10 @@ const Login = ({ onLogin }) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Enter your email"
               required
+              autoComplete="email"
             />
           </div>
           
@@ -57,33 +62,41 @@ const Login = ({ onLogin }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Enter your password"
               required
+              autoComplete="current-password"
             />
           </div>
 
           {error && (
-            <div className="text-error text-sm text-center">
+            <div className="text-error text-sm text-center bg-error bg-opacity-10 p-3 rounded-lg">
               {error}
             </div>
           )}
           
           <button
             type="submit"
-            className="w-full btn btn-primary"
+            className="w-full btn btn-primary py-3"
           >
             Sign In
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-text-light">Don't have an account?</p>
+        <div className="mt-8 text-center">
+          <p className="text-text-light mb-4">Don't have an account?</p>
           <button
             onClick={handleRegister}
-            className="mt-2 w-full btn btn-outline"
+            className="w-full btn btn-outline"
           >
             Create Account
           </button>
+        </div>
+
+        <div className="mt-8 pt-6 border-t text-center">
+          <p className="text-sm text-text-light">
+            By signing in, you agree to MARS Learning's Terms of Service and Privacy Policy.
+          </p>
         </div>
       </div>
     </div>
