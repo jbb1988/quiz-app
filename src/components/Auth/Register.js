@@ -11,6 +11,12 @@ const Register = ({ onRegister }) => {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    password: false,
+    confirmPassword: false
+  });
 
   const handleChange = (e) => {
     setFormData({
@@ -20,24 +26,51 @@ const Register = ({ onRegister }) => {
     setError('');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
+  const handleBlur = (e) => {
+    setTouched({
+      ...touched,
+      [e.target.name]: true
+    });
+  };
 
+  const validateForm = () => {
     if (!formData.name.trim()) {
       setError('Please enter your name');
-      return;
+      return false;
     }
     if (!formData.email.trim()) {
       setError('Please enter your email');
-      return;
+      return false;
+    }
+    if (!formData.email.includes('@')) {
+      setError('Please enter a valid email address');
+      return false;
     }
     if (!formData.password) {
       setError('Please enter a password');
-      return;
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
     }
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setTouched({
+      name: true,
+      email: true,
+      password: true,
+      confirmPassword: true
+    });
+
+    if (!validateForm()) {
       return;
     }
 
@@ -67,13 +100,37 @@ const Register = ({ onRegister }) => {
     }
   };
 
+  const getValidationMessage = (field) => {
+    if (!touched[field]) return '';
+    
+    switch (field) {
+      case 'name':
+        if (!formData.name.trim()) return 'Name is required';
+        return '';
+      case 'email':
+        if (!formData.email.trim()) return 'Email is required';
+        if (!formData.email.includes('@')) return 'Please enter a valid email';
+        return '';
+      case 'password':
+        if (!formData.password) return 'Password is required';
+        if (formData.password.length < 6) return 'Password must be at least 6 characters';
+        return '';
+      case 'confirmPassword':
+        if (!formData.confirmPassword) return 'Please confirm your password';
+        if (formData.password !== formData.confirmPassword) return 'Passwords do not match';
+        return '';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="auth-form-container">
       <div className="auth-form">
         <h1>Create Account</h1>
         <p>Join MARS Learning to start your training</p>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label>Name</label>
             <input
@@ -81,11 +138,15 @@ const Register = ({ onRegister }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="form-input"
+              onBlur={handleBlur}
+              className={`form-input ${touched.name && getValidationMessage('name') ? 'invalid' : ''}`}
               placeholder="Enter your name"
               autoComplete="name"
               required
             />
+            {touched.name && getValidationMessage('name') && (
+              <div className="validation-message">{getValidationMessage('name')}</div>
+            )}
           </div>
 
           <div className="form-group">
@@ -95,11 +156,15 @@ const Register = ({ onRegister }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-input"
+              onBlur={handleBlur}
+              className={`form-input ${touched.email && getValidationMessage('email') ? 'invalid' : ''}`}
               placeholder="Enter your email"
               autoComplete="email"
               required
             />
+            {touched.email && getValidationMessage('email') && (
+              <div className="validation-message">{getValidationMessage('email')}</div>
+            )}
           </div>
           
           <div className="form-group">
@@ -109,11 +174,15 @@ const Register = ({ onRegister }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="form-input"
+              onBlur={handleBlur}
+              className={`form-input ${touched.password && getValidationMessage('password') ? 'invalid' : ''}`}
               placeholder="Create a password"
               autoComplete="new-password"
               required
             />
+            {touched.password && getValidationMessage('password') && (
+              <div className="validation-message">{getValidationMessage('password')}</div>
+            )}
           </div>
 
           <div className="form-group">
@@ -123,11 +192,15 @@ const Register = ({ onRegister }) => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="form-input"
+              onBlur={handleBlur}
+              className={`form-input ${touched.confirmPassword && getValidationMessage('confirmPassword') ? 'invalid' : ''}`}
               placeholder="Confirm your password"
               autoComplete="new-password"
               required
             />
+            {touched.confirmPassword && getValidationMessage('confirmPassword') && (
+              <div className="validation-message">{getValidationMessage('confirmPassword')}</div>
+            )}
           </div>
 
           {error && (
