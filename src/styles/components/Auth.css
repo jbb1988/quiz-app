@@ -39,6 +39,7 @@
 
 .form-group {
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .form-group label {
@@ -69,6 +70,24 @@
   color: var(--color-text-light);
 }
 
+.form-input:invalid {
+  border-color: var(--color-error);
+}
+
+.form-input:invalid:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(245,101,101,0.1);
+}
+
+.form-input:invalid + .validation-message {
+  display: block;
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  font-size: 0.75rem;
+  color: var(--color-error);
+}
+
 /* Error Message */
 .error {
   background-color: #fff5f5;
@@ -80,18 +99,42 @@
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid rgba(229, 62, 62, 0.1);
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 
 /* Auth Buttons */
 .auth-form .btn {
   width: 100%;
   margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
 }
 
 .auth-form .btn-primary {
   background: var(--gradient-primary);
   color: white;
   border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.auth-form .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .auth-form .btn-outline {
