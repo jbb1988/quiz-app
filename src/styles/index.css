@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Theme variables */
   --color-primary: #008ACC;
   --color-secondary: #004F87;
   --color-background-light: #f0f4f8;
@@ -38,11 +37,11 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--color-background-light);
-  background-image: 
-    linear-gradient(135deg, rgba(0,138,204,0.05) 0%, rgba(0,79,135,0.05) 100%),
+  background: 
+    linear-gradient(135deg, rgba(0,138,204,0.03) 0%, rgba(0,79,135,0.03) 100%),
     repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 4px),
-    linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background-attachment: fixed;
   color: var(--color-text-primary);
   line-height: 1.5;
   min-height: 100vh;
@@ -63,6 +62,24 @@ body {
   transition: var(--transition-default);
   border: 1px solid rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 138, 204, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.card:hover::before {
+  transform: translateX(100%);
 }
 
 .card:hover {
@@ -99,7 +116,7 @@ body {
   height: 120%;
   background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
   transform: translate(-50%, -50%) scale(0);
-  transition: var(--transition-default);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
@@ -116,6 +133,7 @@ body {
 .btn-primary:hover {
   box-shadow: 0 4px 6px rgba(0, 138, 204, 0.2);
   filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -128,6 +146,7 @@ body {
   background: var(--gradient-primary);
   color: white;
   border-color: transparent;
+  transform: translateY(-1px);
 }
 
 .timer {
@@ -141,16 +160,50 @@ body {
   background: linear-gradient(135deg, rgba(0,138,204,0.05) 0%, rgba(0,79,135,0.05) 100%);
   transition: var(--transition-default);
   box-shadow: var(--shadow-inner);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .timer.warning {
   background: linear-gradient(135deg, rgba(237,137,54,0.05) 0%, rgba(237,137,54,0.1) 100%);
   color: var(--color-warning);
+  animation: pulse-warning 1s infinite;
 }
 
 .timer.danger {
   background: linear-gradient(135deg, rgba(245,101,101,0.05) 0%, rgba(245,101,101,0.1) 100%);
   color: var(--color-error);
+  animation: pulse-danger 1s infinite;
+}
+
+@keyframes pulse-warning {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-danger {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 .options {
@@ -166,7 +219,7 @@ body {
   background: transparent;
   color: var(--color-text-primary);
   cursor: pointer;
-  transition: var(--transition-default);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
   font-size: 1rem;
   width: 100%;
@@ -175,7 +228,7 @@ body {
 }
 
 .option:hover:not(:disabled) {
-  background: var(--gradient-hover);
+  background: linear-gradient(135deg, rgba(0,138,204,0.05) 0%, rgba(0,79,135,0.05) 100%);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -184,18 +237,34 @@ body {
   background: var(--gradient-primary);
   color: white;
   border-color: transparent;
+  transform: translateY(-2px);
 }
 
 .option.correct {
   background: linear-gradient(135deg, var(--color-success) 0%, #2f855a 100%);
   border-color: transparent;
   color: white;
+  transform: translateY(-2px);
+  animation: correct-answer 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .option.incorrect {
   background: linear-gradient(135deg, var(--color-error) 0%, #c53030 100%);
   border-color: transparent;
   color: white;
+  animation: incorrect-answer 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes correct-answer {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(-2px); }
+}
+
+@keyframes incorrect-answer {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
 .feedback {
@@ -204,6 +273,18 @@ body {
   border-radius: var(--radius-lg);
   transition: var(--transition-default);
   box-shadow: var(--shadow-inner);
+  animation: feedback-appear 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes feedback-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .feedback.correct {
@@ -228,8 +309,31 @@ body {
 
 .progress-bar {
   height: 100%;
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: progress-shine 2s infinite;
+}
+
+@keyframes progress-shine {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 /* Dashboard styles */
@@ -255,6 +359,8 @@ body {
   height: 72px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10;
 }
 
 .dashboard-logo {
@@ -274,6 +380,8 @@ body {
   box-shadow: var(--shadow-sm);
   border-right: 1px solid rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 5;
 }
 
 .dashboard-sidebar button {
@@ -291,7 +399,7 @@ body {
 }
 
 .dashboard-sidebar button:hover {
-  background: var(--gradient-hover);
+  background: linear-gradient(135deg, rgba(0,138,204,0.05) 0%, rgba(0,79,135,0.05) 100%);
   transform: translateX(4px);
 }
 
@@ -299,6 +407,8 @@ body {
   grid-area: main;
   padding: 2rem;
   overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .course-grid {
@@ -321,6 +431,23 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
   backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.course-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 138, 204, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.course-card:hover::before {
+  transform: translateX(100%);
 }
 
 .course-card:hover {
@@ -333,22 +460,23 @@ body {
   padding: 2rem;
   position: relative;
   overflow: hidden;
+  background: var(--gradient-primary);
 }
 
-.course-card-header::before {
+.course-card-header::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--gradient-primary);
-  opacity: 0.1;
-  transition: var(--transition-default);
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.course-card:hover .course-card-header::before {
-  opacity: 0.15;
+.course-card:hover .course-card-header::after {
+  opacity: 1;
 }
 
 .course-card-body {
@@ -356,7 +484,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  background: var(--gradient-card);
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(0,138,204,0.02) 100%);
 }
 
 .course-card-footer {
