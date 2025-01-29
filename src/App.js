@@ -14,7 +14,16 @@ import { allCourses } from './data/courses';
 const ProtectedRoute = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('marsCurrentUser'));
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+// Public Route wrapper (for login/register)
+const PublicRoute = ({ children }) => {
+  const currentUser = JSON.parse(localStorage.getItem('marsCurrentUser'));
+  if (currentUser) {
+    return <Navigate to="/" replace />;
   }
   return children;
 };
@@ -95,82 +104,115 @@ function App() {
     setCurrentQuiz(null);
   };
 
-  if (!currentUser) {
-    return (
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/register" element={<Register onRegister={handleRegister} />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      </Router>
-    );
-  }
+  const handleUpdateProfile = (updatedUser) => {
+    setCurrentUser(updatedUser);
+  };
 
   return (
     <Router>
-      <Layout onLogout={handleLogout}>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute>
+      <Routes>
+        {/* Public Routes */}
+        <Route 
+          path="/login" 
+          element={
+            <PublicRoute>
+              <Login onLogin={handleLogin} />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            <PublicRoute>
+              <Register onRegister={handleRegister} />
+            </PublicRoute>
+          } 
+        />
+
+        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout onLogout={handleLogout}>
                 <Dashboard 
                   courses={allCourses}
-                  userProgress={currentUser.progress}
+                  userProgress={currentUser?.progress}
                 />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/course/:courseId" 
-            element={
-              <ProtectedRoute>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/course/:courseId"
+          element={
+            <ProtectedRoute>
+              <Layout onLogout={handleLogout}>
                 <CourseViewWrapper 
                   onQuizSelect={handleQuizSelect}
-                  userProgress={currentUser.progress}
+                  userProgress={currentUser?.progress}
                 />
-              </ProtectedRoute>
-            }
-          />
-          <Route 
-            path="/quiz" 
-            element={
-              <ProtectedRoute>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <ProtectedRoute>
+              <Layout onLogout={handleLogout}>
                 {currentQuiz ? (
                   <Quiz 
                     quiz={currentQuiz}
                     courseName={currentQuiz.courseName}
                     onComplete={handleQuizComplete}
                     previousAttempt={
-                      currentUser.progress[currentQuiz.courseId]?.[currentQuiz.id]
+                      currentUser?.progress[currentQuiz.courseId]?.[currentQuiz.id]
                     }
                   />
                 ) : (
                   <Navigate to="/" />
                 )}
-              </ProtectedRoute>
-            }
-          />
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <Profile user={currentUser} />
-              </ProtectedRoute>
-            }
-          />
-          <Route 
-            path="/progress" 
-            element={
-              <ProtectedRoute>
-                <Progress userProgress={currentUser.progress} />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Layout>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Layout onLogout={handleLogout}>
+                <Profile 
+                  user={currentUser} 
+                  onUpdateProfile={handleUpdateProfile}
+                />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/progress"
+          element={
+            <ProtectedRoute>
+              <Layout onLogout={handleLogout}>
+                <Progress userProgress={currentUser?.progress} />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback Route */}
+        <Route 
+          path="*" 
+          element={
+            currentUser ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          } 
+        />
+      </Routes>
     </Router>
   );
 }
