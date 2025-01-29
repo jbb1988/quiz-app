@@ -2,20 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
 
-const Dashboard = ({ courses, onCourseSelect }) => {
+const Dashboard = ({ courses }) => {
   const navigate = useNavigate();
   
-  const categorizedCourses = Object.entries(courses).reduce((acc, [id, course]) => {
-    const category = course.category;
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push({ id, ...course });
-    return acc;
-  }, {});
-
-  const handleCourseSelect = (courseId) => {
-    onCourseSelect(courseId);
+  const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
 
@@ -23,7 +13,10 @@ const Dashboard = ({ courses, onCourseSelect }) => {
     <div className="dashboard">
       <header className="dashboard-header">
         <div className="flex items-center gap-4">
-          <div className="text-2xl font-bold text-primary">
+          <div 
+            className="text-2xl font-bold text-primary cursor-pointer"
+            onClick={() => navigate('/')}
+          >
             MARS Learning
           </div>
         </div>
@@ -67,46 +60,50 @@ const Dashboard = ({ courses, onCourseSelect }) => {
           <p className="text-text-light">Select a course to begin your training</p>
         </div>
 
-        {Object.entries(categorizedCourses).map(([category, courses]) => (
-          <div key={category} className="mb-12">
-            <h2 className="text-xl font-bold mb-6">{courseCategories[category].name}</h2>
-            <div className="course-grid">
-              {courses.map(course => (
-                <div
-                  key={course.id}
-                  className="course-card"
-                  onClick={() => handleCourseSelect(course.id)}
-                >
-                  <div 
-                    className="course-card-header"
-                    style={{
-                      background: courseCategories[course.category].gradient
-                    }}
+        {Object.entries(courseCategories).map(([categoryId, category]) => {
+          const categoryCourses = Object.entries(courses).filter(([_, course]) => course.category === categoryId);
+          
+          return categoryCourses.length > 0 ? (
+            <div key={categoryId} className="mb-12">
+              <h2 className="text-xl font-bold mb-6">{category.name}</h2>
+              <div className="course-grid">
+                {categoryCourses.map(([id, course]) => (
+                  <div
+                    key={id}
+                    className="course-card"
+                    onClick={() => handleCourseClick(id)}
                   >
-                    <h3 className="text-xl font-bold text-white mb-1">{course.title}</h3>
-                    <p className="text-white opacity-90">{course.subtitle}</p>
-                  </div>
-                  <div className="course-card-body">
-                    <p className="text-text-light mb-4">{course.description}</p>
-                    <div className="course-card-footer">
-                      <div className="text-sm text-text-light">
-                        {course.modules?.length || 0} modules
+                    <div 
+                      className="course-card-header"
+                      style={{
+                        background: courseCategories[course.category].gradient
+                      }}
+                    >
+                      <h3 className="text-xl font-bold text-white mb-1">{course.title}</h3>
+                      <p className="text-white opacity-90">{course.subtitle}</p>
+                    </div>
+                    <div className="course-card-body">
+                      <p className="text-text-light mb-4">{course.description}</p>
+                      <div className="course-card-footer">
+                        <div className="text-sm text-text-light">
+                          {course.modules?.length || 0} modules
+                        </div>
+                        <button 
+                          className="btn btn-primary"
+                          style={{
+                            background: courseCategories[course.category].gradient
+                          }}
+                        >
+                          Start Learning
+                        </button>
                       </div>
-                      <button 
-                        className="btn btn-primary"
-                        style={{
-                          background: courseCategories[course.category].gradient
-                        }}
-                      >
-                        Start Learning
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ) : null;
+        })}
       </main>
     </div>
   );
