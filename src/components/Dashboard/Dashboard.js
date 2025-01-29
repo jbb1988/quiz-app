@@ -14,6 +14,16 @@ const Dashboard = () => {
     { id: 'sales', name: 'Sales' }
   ];
 
+  // Group courses by category
+  const coursesByCategory = Object.entries(allCourses).reduce((acc, [id, course]) => {
+    const category = course.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push({ id, ...course });
+    return acc;
+  }, {});
+
   return (
     <div className="dashboard">
       <div className="dashboard-sidebar">
@@ -34,11 +44,13 @@ const Dashboard = () => {
       <div className="dashboard-main">
         <h1>Select a course to begin your training</h1>
 
-        {Object.entries(allCourses).map(([id, course]) => (
-          <div key={id}>
-            <h2 className="section-header">{courseCategories[course.category].name}</h2>
+        {Object.entries(coursesByCategory).map(([category, courses]) => (
+          <div key={category}>
+            <h2 className="section-header">{courseCategories[category].name}</h2>
             <div className="course-grid">
-              <CourseView course={course} />
+              {courses.map(course => (
+                <CourseView key={course.id} course={course} />
+              ))}
             </div>
           </div>
         ))}
