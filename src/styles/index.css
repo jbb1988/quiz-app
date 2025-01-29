@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Import theme variables */
+  /* Theme variables */
   --color-primary: #008ACC;
   --color-secondary: #004F87;
   --color-background-light: #f0f4f8;
@@ -38,7 +38,11 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--gradient-background);
+  background-color: var(--color-background-light);
+  background-image: 
+    linear-gradient(135deg, rgba(0,138,204,0.05) 0%, rgba(0,79,135,0.05) 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 4px),
+    linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
   color: var(--color-text-primary);
   line-height: 1.5;
   min-height: 100vh;
