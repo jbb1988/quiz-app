@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../styles/components/Quiz.css';
 
 const Question = ({ question, onAnswer, number, total }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleOptionClick = (index) => {
+    if (selectedOption === null) {
+      setSelectedOption(index);
+      onAnswer(index);
+    }
+  };
+
   if (!question) return null;
 
   return (
@@ -18,8 +27,19 @@ const Question = ({ question, onAnswer, number, total }) => {
           {question.options.map((option, index) => (
             <button
               key={index}
-              className="option-button"
-              onClick={() => onAnswer(index)}
+              className={`option-button ${
+                selectedOption === index ? 'selected' : ''
+              } ${
+                selectedOption !== null
+                  ? index === question.correctAnswer
+                    ? 'correct'
+                    : selectedOption === index
+                    ? 'incorrect'
+                    : ''
+                  : ''
+              }`}
+              onClick={() => handleOptionClick(index)}
+              disabled={selectedOption !== null}
             >
               {option}
             </button>
