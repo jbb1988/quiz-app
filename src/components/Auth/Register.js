@@ -7,8 +7,7 @@ const Register = ({ onRegister }) => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    employeeId: ''
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
 
@@ -44,7 +43,6 @@ const Register = ({ onRegister }) => {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      employeeId: formData.employeeId,
       progress: {},
       createdAt: new Date().toISOString()
     };
@@ -61,16 +59,16 @@ const Register = ({ onRegister }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background-light">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+    <div className="auth-form-container">
+      <div className="auth-form">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-primary mb-2">Create Account</h1>
           <p className="text-text-light">Join MARS Learning to start your training</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-text-light mb-1">
+          <div className="form-group">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Full Name
             </label>
             <input
@@ -78,31 +76,15 @@ const Register = ({ onRegister }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="form-input"
               placeholder="Enter your full name"
               required
               autoComplete="name"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-text-light mb-1">
-              Employee ID
-            </label>
-            <input
-              type="text"
-              name="employeeId"
-              value={formData.employeeId}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Enter your employee ID"
-              required
-              autoComplete="off"
-            />
-          </div>
           
-          <div>
-            <label className="block text-sm font-medium text-text-light mb-1">
+          <div className="form-group">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Email
             </label>
             <input
@@ -110,15 +92,15 @@ const Register = ({ onRegister }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="form-input"
               placeholder="Enter your email"
               required
               autoComplete="email"
             />
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-text-light mb-1">
+          <div className="form-group">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Password
             </label>
             <input
@@ -126,19 +108,19 @@ const Register = ({ onRegister }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="form-input"
               placeholder="Create a password"
               required
               minLength={6}
               autoComplete="new-password"
             />
-            <p className="mt-1 text-xs text-text-light">
+            <p className="mt-2 text-xs text-text-light">
               Must be at least 6 characters long
             </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-text-light mb-1">
+          <div className="form-group">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Confirm Password
             </label>
             <input
@@ -146,7 +128,7 @@ const Register = ({ onRegister }) => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="form-input"
               placeholder="Confirm your password"
               required
               minLength={6}
@@ -155,14 +137,14 @@ const Register = ({ onRegister }) => {
           </div>
 
           {error && (
-            <div className="text-error text-sm text-center bg-error bg-opacity-10 p-3 rounded-lg">
+            <div className="error">
               {error}
             </div>
           )}
           
           <button
             type="submit"
-            className="w-full btn btn-primary py-3"
+            className="btn btn-primary w-full py-3"
           >
             Create Account
           </button>
@@ -172,7 +154,7 @@ const Register = ({ onRegister }) => {
           <p className="text-text-light mb-4">Already have an account?</p>
           <button
             onClick={() => navigate('/login')}
-            className="w-full btn btn-outline"
+            className="btn btn-outline w-full"
           >
             Sign In
           </button>
