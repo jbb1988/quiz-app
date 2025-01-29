@@ -1,12 +1,29 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
 
 const CourseView = ({ course, onQuizSelect }) => {
+  const navigate = useNavigate();
+
+  const handleQuizSelect = (quiz) => {
+    onQuizSelect(course.id, quiz);
+    navigate('/quiz');
+  };
+
+  const handleBackClick = () => {
+    navigate('/');
+  };
+
   return (
     <div className="container py-8">
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-4">
-          <h1 className="text-2xl font-bold">{course.title}</h1>
+          <button 
+            onClick={handleBackClick}
+            className="btn btn-outline"
+          >
+            ←Back to Courses
+          </button>
           <div 
             className="inline-block px-3 py-1 rounded-full text-sm"
             style={{ 
@@ -17,6 +34,7 @@ const CourseView = ({ course, onQuizSelect }) => {
             {courseCategories[course.category].name}
           </div>
         </div>
+        <h1 className="text-2xl font-bold mb-2">{course.title}</h1>
         <p className="text-text-light text-lg">{course.description}</p>
       </div>
 
@@ -45,7 +63,7 @@ const CourseView = ({ course, onQuizSelect }) => {
                       </div>
                       <button 
                         className="btn btn-primary"
-                        onClick={() => onQuizSelect(course.id, quiz)}
+                        onClick={() => handleQuizSelect(quiz)}
                         style={{
                           background: courseCategories[course.category].gradient,
                           minWidth: '140px'

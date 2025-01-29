@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
 
 const Dashboard = ({ courses, onCourseSelect }) => {
+  const navigate = useNavigate();
+  
   const categorizedCourses = Object.entries(courses).reduce((acc, [id, course]) => {
     const category = course.category;
     if (!acc[category]) {
@@ -10,6 +13,11 @@ const Dashboard = ({ courses, onCourseSelect }) => {
     acc[category].push({ id, ...course });
     return acc;
   }, {});
+
+  const handleCourseSelect = (courseId) => {
+    onCourseSelect(courseId);
+    navigate(`/course/${courseId}`);
+  };
 
   return (
     <div className="dashboard">
@@ -20,8 +28,18 @@ const Dashboard = ({ courses, onCourseSelect }) => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <button className="btn btn-outline">Profile</button>
-          <button className="btn btn-primary">My Progress</button>
+          <button 
+            className="btn btn-outline"
+            onClick={() => navigate('/profile')}
+          >
+            Profile
+          </button>
+          <button 
+            className="btn btn-primary"
+            onClick={() => navigate('/progress')}
+          >
+            My Progress
+          </button>
         </div>
       </header>
 
@@ -57,7 +75,7 @@ const Dashboard = ({ courses, onCourseSelect }) => {
                 <div
                   key={course.id}
                   className="course-card"
-                  onClick={() => onCourseSelect(course.id)}
+                  onClick={() => handleCourseSelect(course.id)}
                 >
                   <div 
                     className="course-card-header"
