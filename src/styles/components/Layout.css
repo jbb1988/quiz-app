@@ -17,7 +17,6 @@
 }
 
 .hamburger-menu {
-  display: none;
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -25,13 +24,14 @@
   cursor: pointer;
   padding: 0.5rem;
   margin-right: 1rem;
+  transition: color 0.2s;
 }
 
 .hamburger-menu:hover {
   color: var(--color-primary);
 }
 
-nav {
+.top-nav {
   display: flex;
   gap: 1.5rem;
 }
@@ -57,13 +57,163 @@ nav {
   background-color: var(--color-background-light);
 }
 
-.nav-button span {
-  font-size: 1rem;
-}
-
 .user-info {
   color: var(--color-text-primary);
   font-weight: 500;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 300px;
+  background: white;
+  box-shadow: var(--shadow-large);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.user-profile {
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-background-light);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: var(--color-background-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar i {
+  font-size: 2.5rem;
+  color: var(--color-text-secondary);
+}
+
+.user-profile h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.user-profile p {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.progress-summary {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-background-light);
+}
+
+.progress-summary h4 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.side-nav {
+  flex-grow: 1;
+  padding: 1.5rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.menu-item i {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  width: 1.5rem;
+  text-align: center;
+}
+
+.menu-item:hover {
+  background-color: var(--color-background-light);
+}
+
+.menu-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-background-light);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.version {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 150;
 }
 
 .main {
@@ -74,47 +224,4 @@ nav {
 
 .main.auth-page {
   padding: 0;
-}
-
-@media (max-width: 768px) {
-  .header {
-    padding: 1rem;
-  }
-
-  .hamburger-menu {
-    display: block;
-  }
-
-  nav {
-    position: fixed;
-    top: 4rem;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 1rem;
-    box-shadow: var(--shadow-medium);
-    flex-direction: column;
-    gap: 0.5rem;
-    transform: translateY(-150%);
-    transition: transform 0.3s ease;
-    z-index: 99;
-  }
-
-  nav.open {
-    transform: translateY(0);
-  }
-
-  .nav-button {
-    width: 100%;
-    padding: 1rem;
-    border-radius: 0.5rem;
-  }
-
-  .nav-button:hover {
-    background-color: var(--color-background-light);
-  }
-
-  .user-info {
-    font-size: 0.875rem;
-  }
 }
