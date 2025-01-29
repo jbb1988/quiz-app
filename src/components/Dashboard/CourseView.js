@@ -15,13 +15,13 @@ const CourseView = ({ course }) => {
   };
 
   return (
-    <div className="course-card" onClick={handleStartQuiz}>
+    <div className="course-card">
       <div 
         className="course-card-header"
         style={{ background: category.gradient }}
       >
         <h3>{course.title}</h3>
-        <p>{category.name}</p>
+        {course.subtitle && <p>{course.subtitle}</p>}
       </div>
       <div className="course-card-body">
         <p>{course.description}</p>
@@ -34,6 +34,7 @@ const CourseView = ({ course }) => {
         </div>
         <button 
           className="btn btn-primary"
+          onClick={handleStartQuiz}
           style={{ background: category.gradient }}
         >
           Start

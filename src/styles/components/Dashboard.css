@@ -16,7 +16,14 @@
   background: white;
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-medium);
+}
+
+.dashboard-sidebar h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
 }
 
 /* Categories List */
@@ -58,12 +65,33 @@
   color: white;
 }
 
+/* Main Content */
+.dashboard-main {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-medium);
+}
+
+.dashboard-main h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--color-text-primary);
+}
+
+.section-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  color: var(--color-text-primary);
+}
+
 /* Course Grid */
 .course-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
-  margin-top: 1rem;
 }
 
 /* Course Cards */
@@ -71,26 +99,30 @@
   background: white;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-medium);
   transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
 }
 
 .course-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-large);
 }
 
 .course-card-header {
   padding: 1.5rem;
-  background: var(--gradient-primary);
+  color: white;
 }
 
-.course-card-header h3,
-.course-card-header p,
-.course-card-header div,
-.course-card-header span {
-  color: white !important;
+.course-card-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.course-card-header p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0;
 }
 
 .course-card-body {
@@ -99,8 +131,8 @@
 
 .course-card-body p {
   color: var(--color-text-secondary);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .course-card-footer {
@@ -111,39 +143,21 @@
   justify-content: space-between;
 }
 
-.course-card-footer .btn {
-  padding: 0.5rem 1rem;
+.course-card-footer span {
   font-size: 0.875rem;
-  min-width: 80px;
-}
-
-/* Main Content */
-.dashboard-main {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-.dashboard-main h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--color-text-primary);
-}
-
-.dashboard-main p {
   color: var(--color-text-secondary);
-  margin-bottom: 2rem;
 }
 
-/* Section Headers */
-.section-header {
-  margin-bottom: 1.5rem;
+.course-card-footer .btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.2s;
 }
 
-.section-header h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text-primary);
+.course-card-footer .btn:hover {
+  filter: brightness(1.1);
 }

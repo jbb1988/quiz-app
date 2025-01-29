@@ -1,16 +1,36 @@
 export const courseCategories = {
   software: {
-    name: 'Software',
+    name: 'Software Training',
     gradient: 'linear-gradient(135deg, #0088cc, #004466)',
     color: '#0088cc'
+  },
+  hardware: {
+    name: 'Hardware Training',
+    gradient: 'linear-gradient(135deg, #28a745, #1e7e34)',
+    color: '#28a745'
+  },
+  company: {
+    name: 'Company & Culture',
+    gradient: 'linear-gradient(135deg, #6f42c1, #4e2d89)',
+    color: '#6f42c1'
+  },
+  mcc: {
+    name: 'MCC',
+    gradient: 'linear-gradient(135deg, #e83e8c, #ac2167)',
+    color: '#e83e8c'
+  },
+  sales: {
+    name: 'Sales',
+    gradient: 'linear-gradient(135deg, #fd7e14, #c66a0b)',
+    color: '#fd7e14'
   }
 };
 
 export const gradients = {
   primary: 'linear-gradient(135deg, #0088cc, #004466)',
-  success: 'linear-gradient(135deg, #28a745, #155724)',
+  success: 'linear-gradient(135deg, #28a745, #1e7e34)',
   warning: 'linear-gradient(135deg, #ffc107, #d39e00)',
-  danger: 'linear-gradient(135deg, #dc3545, #a71d2a)'
+  danger: 'linear-gradient(135deg, #dc3545, #bd2130)'
 };
 
 export const colors = {
@@ -60,40 +80,4 @@ export const breakpoints = {
   md: '768px',
   lg: '992px',
   xl: '1200px'
-};
-
-export const typography = {
-  fontFamily: {
-    primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-    monospace: "'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace"
-  },
-  fontSize: {
-    xs: '0.75rem',
-    sm: '0.875rem',
-    md: '1rem',
-    lg: '1.25rem',
-    xl: '1.5rem'
-  },
-  fontWeight: {
-    light: 300,
-    regular: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700
-  },
-  lineHeight: {
-    tight: 1.25,
-    normal: 1.5,
-    loose: 2
-  }
-};
-
-export const zIndex = {
-  dropdown: 1000,
-  sticky: 1020,
-  fixed: 1030,
-  modalBackdrop: 1040,
-  modal: 1050,
-  popover: 1060,
-  tooltip: 1070
 };
