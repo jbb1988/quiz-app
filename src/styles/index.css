@@ -1,69 +1,122 @@
-/* ... [Previous CSS remains unchanged until error section] ... */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.error {
-  background-color: rgba(245, 101, 101, 0.1);
-  color: var(--color-error);
-  padding: 1rem;
-  border-radius: var(--radius-md);
-  margin: 1.5rem 0;
-  text-align: center;
-  font-size: 0.875rem;
-  font-weight: 500;
+:root {
+  --color-primary: #008ACC;
+  --color-secondary: #004F87;
+  --color-background-light: #f0f4f8;
+  --color-background-dark: #e2e8f0;
+  --color-text-primary: #1a202c;
+  --color-text-secondary: #4a5568;
+  --color-text-light: #718096;
+  --color-success: #48bb78;
+  --color-error: #f56565;
+  --color-warning: #ed8936;
+  --gradient-primary: linear-gradient(135deg, #008ACC 0%, #004F87 100%);
+  --gradient-secondary: linear-gradient(135deg, #004F87 0%, #002645 100%);
+  --gradient-background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --gradient-hover: linear-gradient(135deg, rgba(0,138,204,0.1) 0%, rgba(0,79,135,0.1) 100%);
+}
+
+.auth-form-container {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  border: 1px solid rgba(245, 101, 101, 0.2);
-  box-shadow: 0 2px 4px rgba(245, 101, 101, 0.1);
-  animation: 
-    shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both,
-    slideIn 0.3s ease-out;
-  transform-origin: center;
+  padding: 1.5rem;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-  20%, 40%, 60%, 80% { transform: translateX(4px); }
+.auth-form {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 28rem;
 }
 
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
 }
 
-.error:before {
-  content: "⚠️";
-  font-size: 1.125rem;
-  animation: pulse 2s infinite;
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.3s;
+  background-color: white;
+  color: var(--color-text-primary);
 }
 
-.form-input.error {
-  border-color: var(--color-error);
-  background-color: rgba(245, 101, 101, 0.05);
-  animation: highlight 1s ease-out;
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 138, 204, 0.1);
 }
 
-@keyframes highlight {
-  0% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(245, 101, 101, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0); }
+.form-input::placeholder {
+  color: var(--color-text-light);
 }
 
-.form-input.error:focus {
-  box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.1);
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  margin-top: 0.5rem;
 }
 
-/* ... [Rest of the CSS remains unchanged] ... */
+.btn {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
+
+.text-2xl { font-size: 1.5rem; }
+.text-xl { font-size: 1.25rem; }
+.text-lg { font-size: 1.125rem; }
+.text-sm { font-size: 0.875rem; }
+.font-bold { font-weight: 700; }
+.text-primary { color: var(--color-primary); }
+.text-text-light { color: var(--color-text-light); }
