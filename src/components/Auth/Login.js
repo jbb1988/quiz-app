@@ -8,52 +8,33 @@ const Login = ({ onLogin }) => {
     password: ''
   });
   const [error, setError] = useState('');
-  const [touchedFields, setTouchedFields] = useState({});
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear error when user starts typing
     setError('');
-  };
-
-  const handleBlur = (field) => {
-    setTouchedFields({
-      ...touchedFields,
-      [field]: true
-    });
-  };
-
-  const validateForm = () => {
-    if (!formData.email.trim()) {
-      setError('Please enter your email');
-      return false;
-    }
-    if (!formData.password) {
-      setError('Please enter your password');
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     
-    if (!validateForm()) {
+    if (!formData.email.trim()) {
+      setError('Please enter your email');
+      return;
+    }
+    if (!formData.password) {
+      setError('Please enter your password');
       return;
     }
 
     try {
-      // Get existing users from localStorage
       const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
       
-      // Check if user exists
       if (users[formData.email]) {
         if (users[formData.email].password === formData.password) {
-          // Store current user
           localStorage.setItem('marsCurrentUser', JSON.stringify(users[formData.email]));
           onLogin(users[formData.email]);
           navigate('/');
@@ -68,54 +49,36 @@ const Login = ({ onLogin }) => {
     }
   };
 
-  const getInputClassName = (field) => {
-    const baseClass = 'form-input';
-    if (touchedFields[field] && !formData[field]) {
-      return `${baseClass} error`;
-    }
-    return baseClass;
-  };
-
   return (
     <div className="auth-form-container">
       <div className="auth-form">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-primary mb-2">Welcome to MARS Learning</h1>
-          <p className="text-text-light">Sign in to continue your training</p>
-        </div>
+        <h1>Welcome to MARS Learning</h1>
+        <p>Sign in to continue your training</p>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="form-group required">
-            <label className="block text-sm font-medium text-text-secondary mb-2">
-              Email
-            </label>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              onBlur={() => handleBlur('email')}
-              className={getInputClassName('email')}
+              className="form-input"
               placeholder="Enter your email"
               required
-              autoComplete="email"
             />
           </div>
           
-          <div className="form-group required">
-            <label className="block text-sm font-medium text-text-secondary mb-2">
-              Password
-            </label>
+          <div className="form-group">
+            <label>Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              onBlur={() => handleBlur('password')}
-              className={getInputClassName('password')}
+              className="form-input"
               placeholder="Enter your password"
               required
-              autoComplete="current-password"
             />
           </div>
 
@@ -125,16 +88,13 @@ const Login = ({ onLogin }) => {
             </div>
           )}
           
-          <button
-            type="submit"
-            className="btn btn-primary"
-          >
+          <button type="submit" className="btn btn-primary">
             Sign In
           </button>
         </form>
 
         <div className="mt-8 text-center">
-          <p className="text-text-light mb-4">Don't have an account?</p>
+          <p>Don't have an account?</p>
           <button
             onClick={() => navigate('/register')}
             className="btn btn-outline"
@@ -143,8 +103,8 @@ const Login = ({ onLogin }) => {
           </button>
         </div>
 
-        <div className="mt-8 pt-6 border-t text-center">
-          <p className="text-sm text-text-light">
+        <div className="mt-8 text-center">
+          <p className="text-sm">
             By signing in, you agree to MARS Learning's Terms of Service and Privacy Policy.
           </p>
         </div>
