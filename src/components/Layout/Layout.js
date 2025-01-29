@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/components/Layout.css';
 
 const Layout = ({ children }) => {
@@ -41,7 +41,9 @@ const Layout = ({ children }) => {
 
   const handleNavigation = (path) => {
     setMenuOpen(false);
-    navigate(path);
+    // Ensure path starts with /quiz-app for GitHub Pages
+    const fullPath = `/quiz-app${path}`;
+    window.location.href = fullPath;
   };
 
   return (
