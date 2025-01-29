@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { shuffleArray } from '../../utils/array';
+import React, { useState, useEffect, useCallback } from 'react';
 import Question from './Question';
 import Results from './Results';
 
 const TIME_LIMIT = 30; // seconds per question
 const TIME_BONUS_FACTOR = 1.67; // 50 points max time bonus (30 seconds * 1.67 = 50)
 
-const Quiz = ({ quiz, onComplete }) => {
+const Quiz = ({ quiz, courseName, onComplete }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [score, setScore] = useState(0);
@@ -16,64 +14,47 @@ const Quiz = ({ quiz, onComplete }) => {
   const [timeBonus, setTimeBonus] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
-  const timerRef = useRef(null);
 
-  const clearTimer = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
+  const handleTimeUp = useCallback(() => {
+    if (!selectedAnswer && !showFeedback) {
+      setSelectedAnswer('');
+      setShowFeedback(true);
     }
-  }, []);
+  }, [selectedAnswer, showFeedback]);
 
-  const startTimer = useCallback(() => {
-    clearTimer();
+  // Reset timer when moving to a new question
+  useEffect(() => {
     setTimeLeft(TIME_LIMIT);
+  }, [currentQuestionIndex]);
 
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearTimer();
-          if (!selectedAnswer && !showFeedback) {
-            setSelectedAnswer('');
-            setShowFeedback(true);
+  // Timer effect
+  useEffect(() => {
+    let timerId;
+    
+    if (!showFeedback && timeLeft > 0) {
+      timerId = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            handleTimeUp();
+            return 0;
           }
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, [clearTimer, selectedAnswer, showFeedback]);
-
-  const startNewQuiz = useCallback(() => {
-    setShuffledQuestions(shuffleArray(quiz.questions));
-    setCurrentQuestionIndex(0);
-    setSelectedAnswer(null);
-    setShowFeedback(false);
-    setScore(0);
-    setCorrectAnswers(0);
-    setTimeBonus(0);
-    setQuizComplete(false);
-    startTimer();
-  }, [quiz, startTimer]);
-
-  useEffect(() => {
-    startNewQuiz();
-    return clearTimer;
-  }, [startNewQuiz, clearTimer]);
-
-  // Pause timer during feedback
-  useEffect(() => {
-    if (showFeedback) {
-      clearTimer();
+          return prev - 1;
+        });
+      }, 1000);
     }
-  }, [showFeedback, clearTimer]);
+
+    return () => {
+      if (timerId) {
+        clearInterval(timerId);
+      }
+    };
+  }, [timeLeft, showFeedback, handleTimeUp]);
 
   const handleAnswerSelect = (answer) => {
-    clearTimer();
     setSelectedAnswer(answer);
     setShowFeedback(true);
 
-    const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    const currentQuestion = quiz.questions[currentQuestionIndex];
     const isCorrect = answer === currentQuestion.correctAnswer;
 
     if (isCorrect) {
@@ -88,28 +69,25 @@ const Quiz = ({ quiz, onComplete }) => {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+    if (currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowFeedback(false);
-      startTimer();
     } else {
       setQuizComplete(true);
     }
   };
 
   const handleRestartQuiz = () => {
-    startNewQuiz();
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowFeedback(false);
+    setScore(0);
+    setCorrectAnswers(0);
+    setTimeBonus(0);
+    setQuizComplete(false);
+    setTimeLeft(TIME_LIMIT);
   };
-
-  const handleFinishQuiz = () => {
-    clearTimer();
-    onComplete();
-  };
-
-  if (!shuffledQuestions.length) {
-    return <div>Loading...</div>;
-  }
 
   if (quizComplete) {
     return (
@@ -119,18 +97,19 @@ const Quiz = ({ quiz, onComplete }) => {
         correctAnswers={correctAnswers}
         timeBonus={timeBonus}
         onRestart={handleRestartQuiz}
-        onFinish={handleFinishQuiz}
+        onFinish={onComplete}
       />
     );
   }
 
-  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  const currentQuestion = quiz.questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
 
   return (
     <div className="container">
       <div className="text-center mb-4">
         <h2 className="text-2xl font-bold text-primary mb-2">{quiz.title}</h2>
+        <p className="text-text-light">{courseName}</p>
       </div>
 
       <div className="progress">
@@ -151,7 +130,7 @@ const Quiz = ({ quiz, onComplete }) => {
       </div>
 
       <Question
-        key={currentQuestion.id}
+        key={currentQuestionIndex}
         question={currentQuestion}
         selectedAnswer={selectedAnswer}
         onSelectAnswer={handleAnswerSelect}

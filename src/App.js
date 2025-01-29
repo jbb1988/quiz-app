@@ -1,43 +1,61 @@
 import React, { useState } from 'react';
+import Dashboard from './components/Dashboard/Dashboard';
 import Quiz from './components/Quiz/Quiz';
-import QuizSelection from './components/Quiz/QuizSelection';
-import { getQuizById } from './data/quizzes';
+import { courses } from './styles/theme';
+import { m3SoftwareCourse } from './data/courses/m3-software';
+
+// Add the M3 Software course to our courses
+courses.m3_software = m3SoftwareCourse;
 
 function App() {
-  const [selectedQuizId, setSelectedQuizId] = useState(null);
-  const selectedQuiz = selectedQuizId ? getQuizById(selectedQuizId) : null;
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const [view, setView] = useState('dashboard'); // 'dashboard', 'quiz'
 
-  const handleQuizSelect = (quizId) => {
-    setSelectedQuizId(quizId);
+  const handleQuizSelect = (courseId, quiz) => {
+    setSelectedCourse(courses[courseId]);
+    setSelectedQuiz(quiz);
+    setView('quiz');
   };
 
   const handleQuizComplete = () => {
-    setSelectedQuizId(null);
+    setSelectedQuiz(null);
+    setView('dashboard');
   };
 
+  const handleBackToDashboard = () => {
+    setSelectedCourse(null);
+    setSelectedQuiz(null);
+    setView('dashboard');
+  };
+
+  // If a quiz is selected, show the quiz component
+  if (view === 'quiz' && selectedQuiz) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container py-8">
+          <button 
+            className="btn btn-outline mb-4"
+            onClick={handleBackToDashboard}
+          >
+            ← Back to Dashboard
+          </button>
+          <Quiz 
+            quiz={selectedQuiz}
+            courseName={selectedCourse.title}
+            onComplete={handleQuizComplete}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Otherwise show the dashboard
   return (
-    <div className="min-h-screen bg-background py-8">
-      <header className="container text-center mb-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">LMS Quiz App</h1>
-        <p className="text-text-light">
-          Test your knowledge with our interactive quizzes!
-        </p>
-      </header>
-
-      <main>
-        {selectedQuiz ? (
-          <Quiz quiz={selectedQuiz} onComplete={handleQuizComplete} />
-        ) : (
-          <QuizSelection onSelectQuiz={handleQuizSelect} />
-        )}
-      </main>
-
-      <footer className="container text-center mt-8 text-text-light">
-        <p>
-          Built with React - Perfect for embedding in Notion and other LMS platforms
-        </p>
-      </footer>
-    </div>
+    <Dashboard 
+      onQuizSelect={handleQuizSelect}
+      initialCourse={selectedCourse}
+    />
   );
 }
 

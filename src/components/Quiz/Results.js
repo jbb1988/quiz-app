@@ -1,83 +1,109 @@
 import React from 'react';
-import { FaTrophy, FaClock, FaCheck, FaHome } from 'react-icons/fa';
+import { FaTrophy, FaClock, FaCheckCircle, FaRedo, FaHome } from 'react-icons/fa';
 
-const Results = ({ score, totalQuestions, correctAnswers, timeBonus, onRestart, onFinish }) => {
-  const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+const Results = ({ 
+  score, 
+  totalQuestions, 
+  correctAnswers, 
+  timeBonus, 
+  onRestart, 
+  onFinish 
+}) => {
   const baseScore = correctAnswers * 100;
+  const percentageCorrect = (correctAnswers / totalQuestions) * 100;
+  
+  const getPerformanceMessage = () => {
+    if (percentageCorrect === 100) return "Perfect Score! Outstanding work!";
+    if (percentageCorrect >= 80) return "Excellent work! Keep it up!";
+    if (percentageCorrect >= 60) return "Good job! Room for improvement.";
+    return "Keep practicing! You'll get better.";
+  };
+
+  const getGrade = () => {
+    if (percentageCorrect >= 90) return { letter: 'A', color: '#48bb78' };
+    if (percentageCorrect >= 80) return { letter: 'B', color: '#4299e1' };
+    if (percentageCorrect >= 70) return { letter: 'C', color: '#ecc94b' };
+    if (percentageCorrect >= 60) return { letter: 'D', color: '#ed8936' };
+    return { letter: 'F', color: '#f56565' };
+  };
+
+  const grade = getGrade();
 
   return (
-    <div className="card">
-      <h2 className="text-2xl font-bold mb-6 text-center">Quiz Results</h2>
-      
-      <div className="flex justify-center mb-6">
-        <div className="timer" style={{ fontSize: '2rem' }}>
-          <FaTrophy className="text-yellow-500" />
+    <div className="card max-w-2xl mx-auto">
+      <div className="text-center mb-8">
+        <div 
+          className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center"
+          style={{ backgroundColor: grade.color + '20', color: grade.color }}
+        >
+          <FaTrophy className="text-4xl" />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">Quiz Complete!</h2>
+        <p className="text-text-light">{getPerformanceMessage()}</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="text-center p-4 bg-background rounded-lg">
+          <div className="text-4xl font-bold text-primary mb-2">
+            {grade.letter}
+          </div>
+          <div className="text-text-light">Grade</div>
+        </div>
+        <div className="text-center p-4 bg-background rounded-lg">
+          <div className="text-4xl font-bold text-primary mb-2">
+            {Math.round(percentageCorrect)}%
+          </div>
+          <div className="text-text-light">Accuracy</div>
         </div>
       </div>
 
-      <div className="text-center mb-6">
-        <h3 className="text-3xl font-bold text-primary mb-2">
-          {score} points
-        </h3>
-        <p className="text-text-light">
-          {percentage}% correct ({correctAnswers} out of {totalQuestions})
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 mb-6">
-        <div className="flex items-center justify-between p-3 bg-background rounded-lg">
+      <div className="space-y-4 mb-8">
+        <div className="flex justify-between items-center p-4 bg-background rounded-lg">
           <div className="flex items-center">
-            <FaCheck className="text-success mr-2" />
+            <FaCheckCircle className="text-primary mr-3" />
+            <span>Correct Answers</span>
+          </div>
+          <div className="font-bold">
+            {correctAnswers} of {totalQuestions}
+          </div>
+        </div>
+        
+        <div className="flex justify-between items-center p-4 bg-background rounded-lg">
+          <div className="flex items-center">
+            <FaTrophy className="text-primary mr-3" />
             <span>Base Score</span>
           </div>
-          <span className="font-bold">{baseScore}</span>
+          <div className="font-bold">{baseScore} points</div>
         </div>
-        
-        <div className="flex items-center justify-between p-3 bg-background rounded-lg">
+
+        <div className="flex justify-between items-center p-4 bg-background rounded-lg">
           <div className="flex items-center">
-            <FaClock className="text-primary mr-2" />
+            <FaClock className="text-primary mr-3" />
             <span>Time Bonus</span>
           </div>
-          <span className="font-bold">+{timeBonus}</span>
+          <div className="font-bold">+{timeBonus} points</div>
+        </div>
+
+        <div className="flex justify-between items-center p-4 bg-primary text-white rounded-lg">
+          <div className="font-bold">Total Score</div>
+          <div className="text-2xl font-bold">{score} points</div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex justify-center gap-4">
         <button 
-          className="btn btn-primary"
+          className="btn btn-outline flex items-center gap-2"
           onClick={onRestart}
-          aria-label="Try Again"
         >
+          <FaRedo />
           Try Again
         </button>
-        
         <button 
-          className="btn btn-outline"
+          className="btn btn-primary flex items-center gap-2"
           onClick={onFinish}
-          aria-label="Back to Quiz Selection"
         >
-          <FaHome className="mr-2" />
-          Back to Quiz Selection
-        </button>
-        
-        <button 
-          className="btn btn-outline"
-          onClick={() => {
-            const text = `I scored ${score} points (${percentage}% correct) on the quiz!`;
-            if (navigator.share) {
-              navigator.share({
-                title: 'My Quiz Results',
-                text: text,
-              }).catch(console.error);
-            } else {
-              navigator.clipboard.writeText(text).then(() => {
-                alert('Results copied to clipboard!');
-              }).catch(console.error);
-            }
-          }}
-          aria-label="Share Results"
-        >
-          Share Results
+          <FaHome />
+          Back to Courses
         </button>
       </div>
     </div>
