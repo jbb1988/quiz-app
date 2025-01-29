@@ -1,116 +1,171 @@
-/* Keep existing styles */
-/* ... previous styles ... */
-
-/* Quiz Styles */
-.quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 1.5rem 0;
+/* Base styles */
+:root {
+  --color-primary: #008ACC;
+  --color-success: #48bb78;
+  --color-error: #f56565;
+  --color-text-primary: #1a202c;
+  --color-text-secondary: #4a5568;
+  --color-text-light: #718096;
+  --color-background-light: #f7fafc;
+  --color-background-dark: #e2e8f0;
+  --gradient-primary: linear-gradient(135deg, #008ACC 0%, #004F87 100%);
+  --transition-default: all 0.2s ease;
 }
 
-.quiz-option {
-  display: block;
-  width: 100%;
-  padding: 1.25rem;
-  text-align: left;
-  border: 2px solid var(--color-background-dark);
-  background: white;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-background-light);
   color: var(--color-text-primary);
-  border-radius: 0.75rem;
-  transition: all 0.2s;
-  cursor: pointer;
-  font-size: 1rem;
-  position: relative;
-  overflow: hidden;
+  line-height: 1.5;
 }
 
-.quiz-option:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  background-color: rgba(0, 138, 204, 0.05);
-  transform: translateY(-1px);
-}
-
-.quiz-option:disabled {
-  cursor: default;
-  opacity: 0.7;
-}
-
-.quiz-option.correct {
-  border-color: var(--color-success);
-  background-color: rgba(72, 187, 120, 0.1);
-  color: var(--color-success);
-}
-
-.quiz-option.incorrect {
-  border-color: var(--color-error);
-  background-color: rgba(245, 101, 101, 0.1);
-  color: var(--color-error);
-}
-
-.quiz-feedback {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  text-align: center;
-  font-weight: 500;
-  animation: slideIn 0.3s ease-out;
-}
-
-.quiz-feedback.correct {
-  background-color: rgba(72, 187, 120, 0.1);
-  color: var(--color-success);
-  border: 1px solid rgba(72, 187, 120, 0.2);
-}
-
-.quiz-feedback.incorrect {
-  background-color: rgba(245, 101, 101, 0.1);
-  color: var(--color-error);
-  border: 1px solid rgba(245, 101, 101, 0.2);
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Progress Page */
-.progress-card {
-  background: white;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.progress-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0,0,0,0.1);
-}
-
-.progress-card-header {
-  padding: 1.5rem;
-  background: var(--gradient-primary);
-  color: white;
-}
-
-.progress-card-body {
-  padding: 1.5rem;
-}
-
-.progress-card-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--color-background-light);
+/* Auth Form Container */
+.auth-form-container {
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
 }
 
-/* Keep existing utility classes */
-/* ... utility classes ... */
+/* Auth Form */
+.auth-form {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 28rem;
+}
+
+.auth-form h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.auth-form > p {
+  color: var(--color-text-light);
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 1rem;
+}
+
+.auth-form form {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--color-background-dark);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0,138,204,0.1);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-light);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+/* Error Message */
+.error {
+  background-color: #fff5f5;
+  color: var(--color-error);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(229, 62, 62, 0.1);
+}
+
+/* Import component styles */
+@import './components/Layout.css';
+@import './components/Dashboard.css';
+@import './components/Quiz.css';
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.font-bold { font-weight: 700; }
+.text-primary { color: var(--color-primary); }
+.text-error { color: var(--color-error); }
+.text-text-light { color: var(--color-text-light); }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
+.mr-4 { margin-right: 1rem; }
+.gap-4 { gap: 1rem; }
+.cursor-pointer { cursor: pointer; }
