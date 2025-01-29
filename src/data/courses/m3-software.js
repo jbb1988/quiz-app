@@ -1,6 +1,7 @@
 export const m3SoftwareCourse = {
   id: 'm3_software',
-  title: 'M3 Software (MARS Meter Management)',
+  title: 'M3 Software',
+  subtitle: 'MARS Meter Management',
   category: 'software',
   description: 'Learn about MARS Meter Management software suite',
   modules: [
@@ -37,16 +38,9 @@ export const m3SoftwareCourse = {
               ],
               correctAnswer: "Administrator",
               explanation: "The Administrator role has full control over system settings and permissions in the M3 system."
-            }
-          ]
-        },
-        {
-          id: 'login_user_management',
-          title: 'Logging In and User Management',
-          description: 'Understanding user access, roles, and account management',
-          questions: [
+            },
             {
-              id: 1,
+              id: 3,
               question: "How often should users be encouraged to change their passwords?",
               options: [
                 "Every 30 days",
@@ -58,7 +52,7 @@ export const m3SoftwareCourse = {
               explanation: "Best practice is to change passwords every 90 days to maintain security."
             },
             {
-              id: 2,
+              id: 4,
               question: "What is the first step when logging in to the M3 Web App?",
               options: [
                 "Enter the job number",
@@ -70,7 +64,7 @@ export const m3SoftwareCourse = {
               explanation: "The first step in the login process is launching the M3 Web App."
             },
             {
-              id: 3,
+              id: 5,
               question: "How can an Administrator create a new user?",
               options: [
                 "By selecting 'Add New User' under the 'Test Parameters' menu",
@@ -82,7 +76,7 @@ export const m3SoftwareCourse = {
               explanation: "Administrators can create new users through the 'Users & Roles' menu."
             },
             {
-              id: 4,
+              id: 6,
               question: "What should you do if a user no longer requires access to the M3 system?",
               options: [
                 "Reassign their role to Operator",
@@ -94,7 +88,7 @@ export const m3SoftwareCourse = {
               explanation: "The proper procedure is to deactivate the account rather than deleting it or changing permissions."
             },
             {
-              id: 5,
+              id: 7,
               question: "Which of the following is a best practice for user management?",
               options: [
                 "Allow users to share login credentials",
@@ -104,6 +98,42 @@ export const m3SoftwareCourse = {
               ],
               correctAnswer: "Regularly audit user access",
               explanation: "Regular auditing of user access is a security best practice for system management."
+            },
+            {
+              id: 8,
+              question: "How can you prevent frequent login errors in the M3 system?",
+              options: [
+                "Share login credentials with team members",
+                "Use secure and regularly updated passwords",
+                "Disable account security settings",
+                "Avoid changing passwords for consistency"
+              ],
+              correctAnswer: "Use secure and regularly updated passwords",
+              explanation: "Using secure and regularly updated passwords helps prevent login errors and maintain security."
+            },
+            {
+              id: 9,
+              question: "What information should you have ready when contacting MARS support?",
+              options: [
+                "System configurations",
+                "Error codes, logs, and a detailed issue description",
+                "Previous user login history",
+                "Database backup files"
+              ],
+              correctAnswer: "Error codes, logs, and a detailed issue description",
+              explanation: "Having error codes, logs, and a detailed description helps MARS support resolve issues efficiently."
+            },
+            {
+              id: 10,
+              question: "Why is regular maintenance of user roles important?",
+              options: [
+                "To increase login speed",
+                "To maintain accountability and system security",
+                "To reduce system load",
+                "To allow multiple users per account"
+              ],
+              correctAnswer: "To maintain accountability and system security",
+              explanation: "Regular maintenance of user roles ensures proper accountability and system security."
             }
           ]
         }
