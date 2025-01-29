@@ -26,9 +26,10 @@
 
 body {
   font-family: 'Inter', Arial, sans-serif;
-  background-color: var(--color-background);
+  background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
   color: var(--color-text);
   line-height: 1.5;
+  min-height: 100vh;
 }
 
 .container {
@@ -192,7 +193,7 @@ body {
 .dashboard-header {
   grid-area: header;
   background-color: var(--color-white);
-  padding: 1rem;
+  padding: 1rem 2rem;
   box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
@@ -203,7 +204,6 @@ body {
 .dashboard-logo {
   height: 40px;
   width: auto;
-  object-fit: contain;
 }
 
 .dashboard-sidebar {
@@ -211,6 +211,21 @@ body {
   background-color: var(--color-white);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
+}
+
+.dashboard-sidebar button {
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.dashboard-sidebar button:hover {
+  background-color: var(--color-background);
 }
 
 .dashboard-main {
@@ -239,19 +254,29 @@ body {
 .course-card-header {
   background-color: var(--color-primary);
   color: var(--color-white);
-  padding: 1rem;
+  padding: 1.5rem;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.course-card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.4;
 }
 
 .course-card-body {
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .course-card-body p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   flex-grow: 1;
+  color: var(--color-text-light);
 }
 
 .course-card-footer {
@@ -277,6 +302,44 @@ body {
 
 .module-item:last-child {
   border-bottom: none;
+}
+
+.quiz-item {
+  padding: 1rem;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.quiz-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.quiz-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-item-title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.quiz-item-description {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+.section-title {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .flex {

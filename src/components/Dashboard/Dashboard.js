@@ -28,16 +28,16 @@ const Dashboard = ({ onQuizSelect }) => {
     return (
       <div className="dashboard">
         <header className="dashboard-header">
-          <img src={marsLogo} alt="MARS Company" className="dashboard-logo" />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8">
+            <img src={marsLogo} alt="MARS Company" className="dashboard-logo" />
             <button 
               className="btn btn-outline"
               onClick={handleBackToCourses}
             >
               ← Back to Courses
             </button>
-            <button className="btn btn-primary">My Progress</button>
           </div>
+          <button className="btn btn-primary">My Progress</button>
         </header>
 
         <aside className="dashboard-sidebar">
@@ -79,16 +79,19 @@ const Dashboard = ({ onQuizSelect }) => {
       </header>
 
       <aside className="dashboard-sidebar">
-        <h2 className="text-xl font-bold mb-4">Categories</h2>
+        <h2 className="text-xl font-bold mb-6">Categories</h2>
         <nav>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {Object.values(courseCategories).map(category => (
               <li key={category.id}>
                 <button
-                  className={`w-full text-left p-2 rounded hover:bg-background ${
-                    selectedCategory === category.id ? 'bg-background' : ''
+                  className={`w-full text-left p-3 rounded-lg transition-all ${
+                    selectedCategory === category.id ? 'bg-background font-medium' : ''
                   }`}
-                  style={{ color: category.color }}
+                  style={{ 
+                    color: category.color,
+                    backgroundColor: selectedCategory === category.id ? `${category.color}10` : 'transparent'
+                  }}
                   onClick={() => setSelectedCategory(category.id)}
                 >
                   {category.name}
@@ -128,10 +131,15 @@ const Dashboard = ({ onQuizSelect }) => {
                     <div className="course-card-body">
                       <p className="text-text-light">{course.description}</p>
                       <div className="course-card-footer">
-                        <span className="text-sm text-text-light">
+                        <span className="text-sm font-medium" style={{ color: courseCategories[course.category].color }}>
                           {course.modules?.length || 0} modules
                         </span>
-                        <button className="btn btn-primary">Start Learning</button>
+                        <button 
+                          className="btn btn-primary"
+                          style={{ backgroundColor: courseCategories[course.category].color }}
+                        >
+                          Start Learning
+                        </button>
                       </div>
                     </div>
                   </div>
