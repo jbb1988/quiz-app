@@ -41,13 +41,13 @@ const CourseView = ({ course, onQuizSelect }) => {
                     </div>
                     <div className="flex items-center gap-6 ml-4">
                       <div className="text-sm font-medium" style={{ color: courseCategories[course.category].color }}>
-                        {quiz.questions.length} questions
+                        {quiz.questions?.length || 0} questions
                       </div>
                       <button 
                         className="btn btn-primary"
                         onClick={() => onQuizSelect(course.id, quiz)}
                         style={{
-                          backgroundColor: courseCategories[course.category].color,
+                          background: courseCategories[course.category].gradient,
                           minWidth: '140px'
                         }}
                       >
