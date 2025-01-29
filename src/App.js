@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import Dashboard from './components/Dashboard/Dashboard';
 import CourseView from './components/Dashboard/CourseView';
 import Quiz from './components/Quiz/Quiz';
@@ -9,13 +9,19 @@ const courses = {
   m3_software: m3SoftwareCourse
 };
 
+const CourseViewWrapper = ({ onQuizSelect }) => {
+  const { courseId } = useParams();
+  const course = courses[courseId];
+  
+  if (!course) {
+    return <Navigate to="/" />;
+  }
+  
+  return <CourseView course={course} onQuizSelect={onQuizSelect} />;
+};
+
 function App() {
   const [currentQuiz, setCurrentQuiz] = useState(null);
-  const [currentCourse, setCurrentCourse] = useState(null);
-
-  const handleCourseSelect = (courseId) => {
-    setCurrentCourse(courses[courseId]);
-  };
 
   const handleQuizSelect = (courseId, quiz) => {
     setCurrentQuiz({
@@ -35,22 +41,16 @@ function App() {
           path="/" 
           element={
             <Dashboard 
-              courses={courses} 
-              onCourseSelect={handleCourseSelect}
+              courses={courses}
             />
           } 
         />
         <Route 
           path="/course/:courseId" 
           element={
-            currentCourse ? (
-              <CourseView 
-                course={currentCourse}
-                onQuizSelect={handleQuizSelect}
-              />
-            ) : (
-              <Navigate to="/" />
-            )
+            <CourseViewWrapper 
+              onQuizSelect={handleQuizSelect}
+            />
           }
         />
         <Route 
