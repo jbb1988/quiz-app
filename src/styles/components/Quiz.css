@@ -3,6 +3,9 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: calc(100vh - 64px - 56px); /* viewport height - header - footer */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Quiz Header */
@@ -12,6 +15,10 @@
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .quiz-title {
@@ -46,6 +53,10 @@
   padding: 2rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .question-text {
@@ -141,6 +152,10 @@
   padding: 2rem;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .results-score {

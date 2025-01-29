@@ -87,20 +87,13 @@
   color: white;
 }
 
-.course-card-header h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+.course-card-header h3,
+.course-card-header p {
+  color: white;
 }
 
 .course-card-body {
   padding: 1.5rem;
-}
-
-.course-card-body p {
-  color: var(--color-text-secondary);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
 }
 
 .course-card-footer {
@@ -135,15 +128,4 @@
 .dashboard-main p {
   color: var(--color-text-secondary);
   margin-bottom: 2rem;
-}
-
-/* Section Headers */
-.section-header {
-  margin-bottom: 1.5rem;
-}
-
-.section-header h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text-primary);
 }
