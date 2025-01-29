@@ -1,140 +1,127 @@
 import React, { useState } from 'react';
+import { approvedDesigns } from '../../styles/theme';
 import '../../styles/components/Profile.css';
 
 const Profile = ({ user }) => {
+  const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    company: user?.company || '',
-    role: user?.role || ''
+    name: user.name,
+    email: user.email,
+    notifications: true,
+    theme: 'light'
   });
-
-  const stats = {
-    coursesCompleted: Object.keys(user?.progress || {}).length,
-    averageScore: calculateAverageScore(user?.progress || {}),
-    totalQuizzes: calculateTotalQuizzes(user?.progress || {})
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Update user profile logic here
+    // Save changes would go here
+    setEditMode(false);
   };
 
   return (
     <div className="profile-container">
-      <div className="profile-card">
-        <div className="profile-header">
-          <div className="profile-avatar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </div>
-          <h2 className="profile-name">{formData.name}</h2>
-          <p className="profile-email">{formData.email}</p>
-        </div>
+      <div className="profile-header">
+        <h1>Profile Settings</h1>
+        <button 
+          className="btn btn-primary"
+          onClick={() => setEditMode(!editMode)}
+        >
+          {editMode ? (
+            <>
+              <i className="fas fa-times"></i>
+              <span>Cancel</span>
+            </>
+          ) : (
+            <>
+              <i className="fas fa-edit"></i>
+              <span>Edit Profile</span>
+            </>
+          )}
+        </button>
+      </div>
 
-        <div className="profile-content">
-          <div className="profile-section">
-            <h3 className="section-title">Learning Progress</h3>
-            <div className="profile-stats">
-              <div className="stat-card">
-                <div className="stat-value">{stats.coursesCompleted}</div>
-                <div className="stat-label">Courses Completed</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-value">
-                  {stats.averageScore > 0 ? `${stats.averageScore}%` : '-'}
-                </div>
-                <div className="stat-label">Average Score</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-value">{stats.totalQuizzes}</div>
-                <div className="stat-label">Quizzes Taken</div>
-              </div>
-            </div>
+      <div className="profile-content">
+        <div className="profile-section">
+          <div className="profile-avatar" style={approvedDesigns.sideMenu.userProfile.avatar}>
+            <i className="fas fa-user-circle"></i>
           </div>
-
-          <div className="profile-section">
-            <h3 className="section-title">Profile Information</h3>
-            <form className="profile-form" onSubmit={handleSubmit}>
+          {editMode ? (
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Name</label>
                 <input
                   type="text"
-                  name="name"
                   value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter your name"
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="form-control"
                 />
               </div>
               <div className="form-group">
                 <label>Email</label>
                 <input
                   type="email"
-                  name="email"
                   value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  disabled
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="form-control"
                 />
               </div>
-              <div className="form-group">
-                <label>Company</label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  placeholder="Enter your company"
-                />
-              </div>
-              <div className="form-group">
-                <label>Role</label>
-                <input
-                  type="text"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  placeholder="Enter your role"
-                />
-              </div>
-
-              <div className="profile-actions">
-                <button type="submit" className="btn btn-primary">
-                  Save Changes
-                </button>
-              </div>
+              <button type="submit" className="btn btn-primary">
+                Save Changes
+              </button>
             </form>
+          ) : (
+            <div className="profile-info">
+              <h2>{user.name}</h2>
+              <p>{user.email}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="profile-section">
+          <h3>Preferences</h3>
+          <div className="preferences-list">
+            <div className="preference-item">
+              <span>Email Notifications</span>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={formData.notifications}
+                  onChange={(e) => setFormData({ ...formData, notifications: e.target.checked })}
+                  disabled={!editMode}
+                />
+                <span className="slider"></span>
+              </label>
+            </div>
+            <div className="preference-item">
+              <span>Theme</span>
+              <select
+                value={formData.theme}
+                onChange={(e) => setFormData({ ...formData, theme: e.target.value })}
+                disabled={!editMode}
+                className="form-control"
+              >
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-section">
+          <h3>Account Security</h3>
+          <div className="security-options">
+            <button className="btn btn-secondary" disabled={!editMode}>
+              <i className="fas fa-key"></i>
+              <span>Change Password</span>
+            </button>
+            <button className="btn btn-secondary" disabled={!editMode}>
+              <i className="fas fa-shield-alt"></i>
+              <span>Two-Factor Authentication</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-function calculateAverageScore(progress) {
-  if (!progress || Object.keys(progress).length === 0) return 0;
-
-  let totalScore = 0;
-  let totalQuestions = 0;
-
-  Object.values(progress).forEach(quiz => {
-    totalScore += quiz.score;
-    totalQuestions += quiz.totalQuestions;
-  });
-
-  return totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
-}
-
-function calculateTotalQuizzes(progress) {
-  return Object.keys(progress || {}).length;
-}
 
 export default Profile;
