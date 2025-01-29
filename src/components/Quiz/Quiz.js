@@ -1,125 +1,146 @@
 import React, { useState, useEffect } from 'react';
-import Question from './Question';
-import Results from './Results';
+import { useNavigate } from 'react-router-dom';
 import Timer from './Timer';
 
 const Quiz = ({ quiz, courseName, onComplete }) => {
+  const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [isQuizComplete, setIsQuizComplete] = useState(false);
   const [score, setScore] = useState(0);
+  const [timeBonus, setTimeBonus] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-
-  useEffect(() => {
-    if (timeLeft > 0 && !showFeedback && !isQuizComplete) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0 && !showFeedback && !isQuizComplete) {
-      handleAnswerSubmit(null);
-    }
-  }, [timeLeft, showFeedback, isQuizComplete]);
-
-  const handleAnswerSubmit = (selectedAnswer) => {
-    const currentQuestion = quiz.questions[currentQuestionIndex];
-    const correct = selectedAnswer === currentQuestion.correctAnswer;
-    
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestionIndex]: {
-        selected: selectedAnswer,
-        correct,
-        timeBonus: timeLeft > 20 ? 2 : timeLeft > 10 ? 1 : 0
-      }
-    }));
-
-    setIsCorrect(correct);
-    setShowFeedback(true);
-
-    if (correct) {
-      const timeBonus = timeLeft > 20 ? 2 : timeLeft > 10 ? 1 : 0;
-      setScore(prev => prev + 1 + timeBonus);
-    }
-
-    setTimeout(() => {
-      setShowFeedback(false);
-      if (currentQuestionIndex < quiz.questions.length - 1) {
-        setCurrentQuestionIndex(prev => prev + 1);
-        setTimeLeft(30);
-      } else {
-        setIsQuizComplete(true);
-      }
-    }, 2000);
-  };
+  const [completed, setCompleted] = useState(false);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
 
-  if (isQuizComplete) {
+  const handleAnswerSubmit = (selectedAnswer) => {
+    const correct = selectedAnswer === currentQuestion.correctAnswer;
+    setIsCorrect(correct);
+    setShowFeedback(true);
+    
+    if (correct) {
+      setScore(prev => prev + 1);
+    }
+  };
+
+  useEffect(() => {
+    if (showFeedback) {
+      const timer = setTimeout(() => {
+        setShowFeedback(false);
+        if (currentQuestionIndex < quiz.questions.length - 1) {
+          setCurrentQuestionIndex(prev => prev + 1);
+        } else {
+          setCompleted(true);
+        }
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showFeedback, handleAnswerSubmit]);
+
+  const handleTimerComplete = (bonusPoints) => {
+    setTimeBonus(bonusPoints);
+  };
+
+  const handleFinish = () => {
+    onComplete();
+    navigate('/');
+  };
+
+  if (completed) {
+    const totalScore = score + timeBonus;
+    const percentage = (totalScore / quiz.questions.length) * 100;
+    
     return (
-      <Results 
-        score={score} 
-        totalQuestions={quiz.questions.length} 
-        answers={answers}
-        onComplete={onComplete}
-      />
+      <div className="container py-8 max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h1 className="text-2xl font-bold mb-6 text-center">Quiz Complete!</h1>
+          <div className="text-center mb-8">
+            <p className="text-4xl font-bold text-primary mb-2">{percentage.toFixed(0)}%</p>
+            <p className="text-text-light">Your Score</p>
+          </div>
+          <div className="space-y-4 mb-8">
+            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+              <span>Correct Answers</span>
+              <span className="font-bold">{score}/{quiz.questions.length}</span>
+            </div>
+            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+              <span>Time Bonus Points</span>
+              <span className="font-bold text-primary">+{timeBonus}</span>
+            </div>
+            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+              <span>Total Score</span>
+              <span className="font-bold">{totalScore}/{quiz.questions.length}</span>
+            </div>
+          </div>
+          <button 
+            onClick={handleFinish}
+            className="w-full btn btn-primary"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="container max-w-3xl mx-auto py-8">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-2">{quiz.title}</h1>
-        <p className="text-text-light">{courseName}</p>
-      </div>
-
-      <div className="mb-8">
-        <div className="progress mb-4">
-          <div 
-            className="progress-bar"
-            style={{ 
-              width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%`,
-              transition: 'width 0.5s ease-in-out'
-            }}
-          />
-        </div>
-        <div className="text-center text-sm text-text-light">
-          Question {currentQuestionIndex + 1} of {quiz.questions.length}
-        </div>
-      </div>
-
-      <Timer 
-        timeLeft={timeLeft} 
-        warning={timeLeft <= 10} 
-        danger={timeLeft <= 5}
-      />
-
-      <Question
-        question={currentQuestion}
-        onAnswer={handleAnswerSubmit}
-        showFeedback={showFeedback}
-        isCorrect={isCorrect}
-        selectedAnswer={answers[currentQuestionIndex]?.selected}
-        disabled={showFeedback}
-      />
-
-      {showFeedback && (
-        <div className={`feedback ${isCorrect ? 'correct' : 'incorrect'}`}>
-          <div className="font-bold mb-2">
-            {isCorrect ? 'Correct!' : 'Incorrect'}
+    <div className="container py-8 max-w-3xl mx-auto">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-xl font-bold">{quiz.title}</h1>
+            <div className="text-text-light">{courseName}</div>
           </div>
-          <div>
-            {currentQuestion.explanation}
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-primary rounded-full h-2 transition-all duration-300"
+              style={{ width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%` }}
+            />
           </div>
-          {isCorrect && timeLeft > 10 && (
-            <div className="mt-2 text-sm">
-              Time Bonus: +{timeLeft > 20 ? 2 : 1} points
+          <div className="flex justify-between text-sm mt-2">
+            <div>Question {currentQuestionIndex + 1} of {quiz.questions.length}</div>
+            <Timer onComplete={handleTimerComplete} />
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="mb-8">
+            <h2 className="text-xl font-bold mb-4">{currentQuestion.question}</h2>
+            <div className="space-y-4">
+              {currentQuestion.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => !showFeedback && handleAnswerSubmit(option)}
+                  className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200
+                    ${showFeedback 
+                      ? option === currentQuestion.correctAnswer
+                        ? 'border-success bg-success bg-opacity-10 text-success'
+                        : option === currentQuestion.options[index]
+                          ? 'border-error bg-error bg-opacity-10 text-error'
+                          : 'border-transparent'
+                      : 'border-gray-200 hover:border-primary hover:bg-primary hover:bg-opacity-5'
+                    }
+                  `}
+                  disabled={showFeedback}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {showFeedback && (
+            <div className={`p-4 rounded-lg mb-4 text-center
+              ${isCorrect 
+                ? 'bg-success bg-opacity-10 text-success'
+                : 'bg-error bg-opacity-10 text-error'
+              }
+            `}>
+              {isCorrect ? 'Correct!' : 'Incorrect. The correct answer is: ' + currentQuestion.correctAnswer}
             </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
