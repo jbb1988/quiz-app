@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { HashRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import Dashboard from './components/Dashboard/Dashboard';
 import CourseView from './components/Dashboard/CourseView';
 import Quiz from './components/Quiz/Quiz';
@@ -35,7 +35,7 @@ function App() {
   };
 
   return (
-    <Router basename="/quiz-app">
+    <Router>
       <Routes>
         <Route 
           path="/" 
@@ -67,6 +67,7 @@ function App() {
             )
           }
         />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
