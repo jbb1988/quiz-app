@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="40" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .logo-text { font-family: Arial, sans-serif; font-weight: bold; }
+    .primary { fill: #008ACC; }
+    .secondary { fill: #004F87; }
+  </style>
+  <text x="10" y="30" class="logo-text primary" font-size="32">MARS</text>
+  <circle cx="170" cy="20" r="15" class="secondary"/>
+</svg>
