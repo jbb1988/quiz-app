@@ -16,15 +16,39 @@ const Register = ({ onRegister }) => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    setError('');
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setError('Please enter your name');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      setError('Please enter your email');
+      return false;
+    }
+    if (!formData.password) {
+      setError('Please enter a password');
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+    if (!validateForm()) {
       return;
     }
 
@@ -47,15 +71,20 @@ const Register = ({ onRegister }) => {
       createdAt: new Date().toISOString()
     };
 
-    // Save to localStorage
-    users[formData.email] = newUser;
-    localStorage.setItem('marsUsers', JSON.stringify(users));
+    try {
+      // Save to localStorage
+      users[formData.email] = newUser;
+      localStorage.setItem('marsUsers', JSON.stringify(users));
+      localStorage.setItem('marsCurrentUser', JSON.stringify(newUser));
 
-    // Call onRegister callback
-    onRegister(newUser);
-    
-    // Navigate to dashboard
-    navigate('/');
+      // Call onRegister callback
+      onRegister(newUser);
+      
+      // Navigate to dashboard
+      navigate('/');
+    } catch (err) {
+      setError('Failed to create account. Please try again.');
+    }
   };
 
   return (
@@ -66,7 +95,7 @@ const Register = ({ onRegister }) => {
           <p className="text-text-light">Join MARS Learning to start your training</p>
         </div>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Full Name

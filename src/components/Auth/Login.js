@@ -3,26 +3,60 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const [error, setError] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    // Clear error when user starts typing
+    setError('');
+  };
+
+  const validateForm = () => {
+    if (!formData.email.trim()) {
+      setError('Please enter your email');
+      return false;
+    }
+    if (!formData.password) {
+      setError('Please enter your password');
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
     
-    // Get existing users from localStorage
-    const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
-    
-    // Check if user exists
-    if (users[email]) {
-      if (users[email].password === password) {
-        onLogin(users[email]);
-        navigate('/');
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      // Get existing users from localStorage
+      const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
+      
+      // Check if user exists
+      if (users[formData.email]) {
+        if (users[formData.email].password === formData.password) {
+          // Store current user
+          localStorage.setItem('marsCurrentUser', JSON.stringify(users[formData.email]));
+          onLogin(users[formData.email]);
+          navigate('/');
+        } else {
+          setError('Invalid password');
+        }
       } else {
-        setError('Invalid password');
+        setError('No account found with this email');
       }
-    } else {
-      setError('User not found');
+    } catch (err) {
+      setError('Failed to sign in. Please try again.');
     }
   };
 
@@ -34,15 +68,16 @@ const Login = ({ onLogin }) => {
           <p className="text-text-light">Sign in to continue your training</p>
         </div>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Email
             </label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               className="form-input"
               placeholder="Enter your email"
               required
@@ -56,8 +91,9 @@ const Login = ({ onLogin }) => {
             </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className="form-input"
               placeholder="Enter your password"
               required
