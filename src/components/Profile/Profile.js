@@ -49,7 +49,9 @@ const Profile = ({ user }) => {
                 <div className="stat-label">Courses Completed</div>
               </div>
               <div className="stat-card">
-                <div className="stat-value">{stats.averageScore}%</div>
+                <div className="stat-value">
+                  {stats.averageScore > 0 ? `${stats.averageScore}%` : '-'}
+                </div>
                 <div className="stat-label">Average Score</div>
               </div>
               <div className="stat-card">
@@ -118,15 +120,21 @@ const Profile = ({ user }) => {
 };
 
 function calculateAverageScore(progress) {
-  const scores = Object.values(progress).map(quiz => 
-    (quiz.score / quiz.totalQuestions) * 100
-  );
-  if (scores.length === 0) return 0;
-  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  if (!progress || Object.keys(progress).length === 0) return 0;
+
+  let totalScore = 0;
+  let totalQuestions = 0;
+
+  Object.values(progress).forEach(quiz => {
+    totalScore += quiz.score;
+    totalQuestions += quiz.totalQuestions;
+  });
+
+  return totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
 }
 
 function calculateTotalQuizzes(progress) {
-  return Object.keys(progress).length;
+  return Object.keys(progress || {}).length;
 }
 
 export default Profile;

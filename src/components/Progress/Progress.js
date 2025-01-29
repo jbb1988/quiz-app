@@ -15,18 +15,24 @@ const Progress = ({ userProgress }) => {
       (total, module) => total + module.quizzes.length,
       0
     );
-    const averageScore = completedQuizzes > 0
-      ? Object.values(courseProgress).reduce(
-          (sum, quiz) => sum + (quiz.score / quiz.totalQuestions) * 100,
-          0
-        ) / completedQuizzes
+
+    let totalScore = 0;
+    let totalQuestions = 0;
+
+    Object.values(courseProgress).forEach(quiz => {
+      totalScore += quiz.score;
+      totalQuestions += quiz.totalQuestions;
+    });
+
+    const averageScore = totalQuestions > 0 
+      ? Math.round((totalScore / totalQuestions) * 100)
       : 0;
 
     return {
       completed: completedQuizzes,
       total: totalQuizzes,
       averageScore,
-      percentage: (completedQuizzes / totalQuizzes) * 100
+      percentage: totalQuizzes > 0 ? (completedQuizzes / totalQuizzes) * 100 : 0
     };
   };
 
@@ -62,7 +68,7 @@ const Progress = ({ userProgress }) => {
                   <div className="stat-box">
                     <div className="stat-label">Average Score</div>
                     <div className="stat-value">
-                      {progress.averageScore.toFixed(1)}%
+                      {progress.averageScore > 0 ? `${progress.averageScore}%` : '-'}
                     </div>
                   </div>
                   <div className="stat-box">
@@ -107,7 +113,7 @@ const Progress = ({ userProgress }) => {
                               </div>
                               <div className="activity-score">
                                 <div className="activity-score-value">
-                                  {((quiz.score / quiz.totalQuestions) * 100).toFixed(1)}%
+                                  {Math.round((quiz.score / quiz.totalQuestions) * 100)}%
                                 </div>
                                 <div className="activity-score-details">
                                   {quiz.score}/{quiz.totalQuestions} correct
@@ -123,7 +129,7 @@ const Progress = ({ userProgress }) => {
 
               <div className="progress-card-footer">
                 <div className="progress-text">
-                  Overall Progress: {progress.percentage.toFixed(1)}%
+                  Overall Progress: {Math.round(progress.percentage)}%
                 </div>
                 <button 
                   onClick={() => navigate(`/course/${courseId}`)}
