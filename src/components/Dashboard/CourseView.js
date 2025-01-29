@@ -6,7 +6,7 @@ const CourseView = ({ course }) => {
   const navigate = useNavigate();
   const category = courseCategories[course.category];
 
-  const handleStartClick = () => {
+  const handleCardClick = () => {
     if (course.modules && course.modules.length > 0 && course.modules[0].quizzes && course.modules[0].quizzes.length > 0) {
       const moduleId = course.modules[0].id;
       const quizId = course.modules[0].quizzes[0].id;
@@ -15,7 +15,7 @@ const CourseView = ({ course }) => {
   };
 
   return (
-    <div className="course-card">
+    <div className="course-card" onClick={handleCardClick} role="button" tabIndex={0}>
       <div 
         className="course-card-header"
         style={{ background: category.gradient }}
@@ -32,13 +32,12 @@ const CourseView = ({ course }) => {
             <span>{course.modules.length} module{course.modules.length !== 1 ? 's' : ''}</span>
           )}
         </div>
-        <button 
+        <div 
           className="btn btn-primary"
-          onClick={handleStartClick}
           style={{ background: category.gradient }}
         >
           Start
-        </button>
+        </div>
       </div>
     </div>
   );
