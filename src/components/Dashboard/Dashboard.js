@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { allCourses } from '../../data/courses';
-import { courseCategories } from '../../styles/theme';
 import CourseView from './CourseView';
 import '../../styles/components/Dashboard.css';
 
 const Dashboard = () => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
   const categories = [
     { id: 'all', name: 'All Courses' },
     { id: 'software', name: 'Software Training' },
@@ -14,15 +15,9 @@ const Dashboard = () => {
     { id: 'sales', name: 'Sales' }
   ];
 
-  // Group courses by category
-  const coursesByCategory = Object.entries(allCourses).reduce((acc, [id, course]) => {
-    const category = course.category;
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push({ id, ...course });
-    return acc;
-  }, {});
+  const filteredCourses = Object.entries(allCourses).filter(([_, course]) => 
+    selectedCategory === 'all' || course.category === selectedCategory
+  );
 
   return (
     <div className="dashboard">
@@ -32,7 +27,8 @@ const Dashboard = () => {
           {categories.map(category => (
             <li key={category.id}>
               <button 
-                className={`category-button ${category.id === 'all' ? 'active' : ''}`}
+                className={`category-button ${category.id === selectedCategory ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(category.id)}
               >
                 {category.name}
               </button>
@@ -43,17 +39,11 @@ const Dashboard = () => {
 
       <div className="dashboard-main">
         <h1>Select a course to begin your training</h1>
-
-        {Object.entries(coursesByCategory).map(([category, courses]) => (
-          <div key={category}>
-            <h2 className="section-header">{courseCategories[category].name}</h2>
-            <div className="course-grid">
-              {courses.map(course => (
-                <CourseView key={course.id} course={course} />
-              ))}
-            </div>
-          </div>
-        ))}
+        <div className="course-grid">
+          {filteredCourses.map(([id, course]) => (
+            <CourseView key={id} course={course} />
+          ))}
+        </div>
       </div>
     </div>
   );

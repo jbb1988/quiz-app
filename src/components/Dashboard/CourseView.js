@@ -6,7 +6,7 @@ const CourseView = ({ course }) => {
   const navigate = useNavigate();
   const category = courseCategories[course.category];
 
-  const handleStartQuiz = () => {
+  const handleStartClick = () => {
     if (course.modules && course.modules.length > 0 && course.modules[0].quizzes && course.modules[0].quizzes.length > 0) {
       const moduleId = course.modules[0].id;
       const quizId = course.modules[0].quizzes[0].id;
@@ -34,7 +34,7 @@ const CourseView = ({ course }) => {
         </div>
         <button 
           className="btn btn-primary"
-          onClick={handleStartQuiz}
+          onClick={handleStartClick}
           style={{ background: category.gradient }}
         >
           Start

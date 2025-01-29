@@ -6,11 +6,6 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
-  // Bypass authentication for testing
-  const testUser = {
-    name: 'Test User'
-  };
-
   return (
     <div className="app">
       {!isAuthPage && (
@@ -20,13 +15,13 @@ const Layout = ({ children }) => {
               <i className="fas fa-home"></i>
               Home
             </Link>
-            <Link to="/courses" className="nav-button">
+            <Link to="/" className="nav-button">
               <i className="fas fa-book"></i>
               Courses
             </Link>
           </nav>
           <div className="user-info">
-            <span>Welcome, {testUser.name}</span>
+            <span>Welcome, {JSON.parse(localStorage.getItem('marsCurrentUser'))?.name || 'Guest'}</span>
           </div>
         </header>
       )}
