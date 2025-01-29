@@ -25,37 +25,11 @@ const Dashboard = ({ courses, userProgress }) => {
 
   return (
     <div className="dashboard">
-      <header className="dashboard-header">
-        <div className="flex items-center gap-4">
-          <div 
-            className="text-2xl font-bold text-primary cursor-pointer"
-            onClick={() => navigate('/')}
-          >
-            MARS Learning
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button 
-            className="btn btn-outline"
-            onClick={() => navigate('/profile')}
-          >
-            Profile
-          </button>
-          <button 
-            className="btn btn-primary"
-            onClick={() => navigate('/progress')}
-          >
-            My Progress
-          </button>
-        </div>
-      </header>
-
       <aside className="dashboard-sidebar">
-        <h2 className="text-xl font-bold mb-6">Categories</h2>
-        <nav className="space-y-2">
+        <nav className="space-y-4">
           <button
-            className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200
-              ${!selectedCategory ? 'bg-primary bg-opacity-10 text-primary' : 'hover:bg-gray-50'}
+            className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200 border border-transparent
+              ${!selectedCategory ? 'bg-primary bg-opacity-10 text-primary border-primary' : 'hover:bg-gray-50'}
             `}
             onClick={() => setSelectedCategory(null)}
           >
@@ -65,12 +39,16 @@ const Dashboard = ({ courses, userProgress }) => {
             <button
               key={id}
               onClick={() => handleCategoryClick(id)}
-              className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200
-                ${selectedCategory === id ? 'bg-opacity-10' : 'hover:bg-gray-50'}
+              className={`w-full text-left px-4 py-3 rounded-md transition-all duration-200 border border-transparent
+                ${selectedCategory === id 
+                  ? 'bg-opacity-10 border-current' 
+                  : 'hover:bg-gray-50'
+                }
               `}
               style={{
                 backgroundColor: selectedCategory === id ? `${category.color}20` : '',
-                color: selectedCategory === id ? category.color : ''
+                color: selectedCategory === id ? category.color : 'var(--color-text-primary)',
+                borderColor: selectedCategory === id ? category.color : 'transparent'
               }}
             >
               {category.name}
@@ -92,7 +70,6 @@ const Dashboard = ({ courses, userProgress }) => {
             if (!selectedCategory || selectedCategory === categoryId) {
               return coursesInCategory.length > 0 ? (
                 <div key={categoryId}>
-                  <h2 className="text-xl font-bold mb-6">{category.name}</h2>
                   <div className="course-grid">
                     {coursesInCategory.map(course => (
                       <div
