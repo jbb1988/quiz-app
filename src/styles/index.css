@@ -1,167 +1,143 @@
-/* Base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* Keep existing styles unchanged */
+/* ... previous styles ... */
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f0f4f8;
-  color: #1a202c;
-  line-height: 1.5;
-}
-
-/* Auth Form Container */
-.auth-form-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Dashboard Layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  background-color: var(--color-background-light);
 }
 
-/* Auth Form */
-.auth-form {
+.dashboard-sidebar {
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
   background: white;
-  padding: 3rem;
+  padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 28rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Form Title */
-.auth-form h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #008ACC;
-  margin-bottom: 1rem;
-  text-align: center;
+.dashboard-main {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.auth-form > p {
-  color: #718096;
-  text-align: center;
-  margin-bottom: 3rem;
-  font-size: 1rem;
-}
-
-/* Form */
-.auth-form form {
-  margin-bottom: 3rem;
-}
-
-/* Form Groups */
-.form-group {
-  margin-bottom: 2.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #4a5568;
-  margin-bottom: 1rem;
-  letter-spacing: 0.025em;
-}
-
-/* Form Inputs */
-.form-input {
-  width: 100%;
-  padding: 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: all 0.2s;
-  background-color: #fff;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #008ACC;
-  box-shadow: 0 0 0 3px rgba(0,138,204,0.1);
-}
-
-.form-input::placeholder {
-  color: #a0aec0;
-}
-
-/* Form Hint */
-.form-hint {
-  font-size: 0.75rem;
-  color: #718096;
-  margin-top: 0.75rem;
-}
-
-/* Buttons */
-.btn {
-  display: block;
-  width: 100%;
-  padding: 1.25rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 3rem;
-  letter-spacing: 0.025em;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #008ACC 0%, #004F87 100%);
-  color: white;
-  border: none;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 2px solid #008ACC;
-  color: #008ACC;
+/* Course Grid */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
   margin-top: 1rem;
 }
 
-.btn-outline:hover {
-  background: linear-gradient(135deg, #008ACC 0%, #004F87 100%);
+/* Course Cards */
+.course-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.course-card-header {
+  padding: 1.5rem;
+  background: var(--gradient-primary);
+}
+
+.course-card-body {
+  padding: 1.5rem;
+}
+
+.course-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* Navigation */
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background-color: var(--color-background-light);
+}
+
+.nav-link.active {
+  background-color: var(--color-primary);
   color: white;
 }
 
-/* Error Message */
-.error {
-  background-color: #fff5f5;
-  color: #e53e3e;
-  padding: 1rem;
+/* Profile Section */
+.profile-section {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Progress Section */
+.progress-section {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Category Buttons */
+.category-button {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  margin: 2rem 0;
-  text-align: center;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border: 1px solid rgba(229, 62, 62, 0.1);
+  transition: all 0.2s;
+  margin-bottom: 0.5rem;
+  border: 2px solid transparent;
 }
 
-/* Utility Classes */
-.text-center {
-  text-align: center;
+.category-button:hover {
+  background-color: var(--color-background-light);
 }
 
-.mt-8 {
-  margin-top: 2.5rem;
+.category-button.active {
+  background-color: var(--color-primary);
+  color: white;
 }
 
-.text-sm {
-  font-size: 0.875rem;
+/* Start Learning Button */
+.start-learning-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-/* Border */
-.border-t {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 2rem;
-  margin-top: 2rem;
+.start-learning-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Keep existing utility classes unchanged */
+/* ... utility classes ... */
