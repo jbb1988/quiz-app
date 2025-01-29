@@ -1,51 +1,52 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { courseCategories } from '../../styles/theme';
+import { courses } from '../../data/courses';
 
-const CourseView = ({ course }) => {
+const CourseView = () => {
   const navigate = useNavigate();
-  const category = courseCategories[course.category];
 
-  const handleClick = () => {
-    if (course.modules && course.modules.length > 0 && course.modules[0].quizzes && course.modules[0].quizzes.length > 0) {
-      const moduleId = course.modules[0].id;
-      const quizId = course.modules[0].quizzes[0].id;
-      navigate(`/quiz/${course.id}/${moduleId}/${quizId}`);
-    }
+  const handleStartCourse = (courseId) => {
+    navigate(`/quiz/${courseId}/module-1/quiz-1`);
   };
 
   return (
-    <div 
-      className="course-card" 
-      onClick={handleClick}
-      onKeyPress={(e) => e.key === 'Enter' && handleClick()}
-      role="button"
-      tabIndex={0}
-      style={{ cursor: 'pointer' }}
-    >
-      <div 
-        className="course-card-header"
-        style={{ background: category.gradient }}
-      >
-        <h3>{course.title}</h3>
-        {course.subtitle && <p>{course.subtitle}</p>}
-      </div>
-      <div className="course-card-body">
-        <p>{course.description}</p>
-      </div>
-      <div className="course-card-footer">
-        <div>
-          {course.modules && course.modules.length > 0 && (
-            <span>{course.modules.length} module{course.modules.length !== 1 ? 's' : ''}</span>
-          )}
+    <div className="course-grid">
+      {courses.map(course => (
+        <div key={course.id} className="course-card">
+          <div className="course-header" style={{ background: `var(--gradient-${course.category})` }}>
+            <h2>{course.title}</h2>
+            {course.description && <p>{course.description}</p>}
+          </div>
+          <div className="course-content">
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${(course.progress.completed / course.progress.total) * 100}%`
+                }}
+              ></div>
+            </div>
+            <div className="course-stats">
+              <div className="stat-item">
+                <div className="stat-value">{course.progress.completed}</div>
+                <div className="stat-label">Completed</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">{course.progress.total}</div>
+                <div className="stat-label">Total Modules</div>
+              </div>
+            </div>
+            <div className="course-action">
+              <button
+                className="start-button"
+                onClick={() => handleStartCourse(course.id)}
+              >
+                Start
+              </button>
+            </div>
+          </div>
         </div>
-        <div 
-          className="btn btn-primary"
-          style={{ background: category.gradient }}
-        >
-          Start
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
