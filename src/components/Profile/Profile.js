@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/components/Profile.css';
 
 const Profile = ({ user }) => {
-  const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user.name,
-    email: user.email,
-    employeeId: user.employeeId,
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    name: user?.name || '',
+    email: user?.email || '',
+    company: user?.company || '',
+    role: user?.role || ''
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+
+  const stats = {
+    coursesCompleted: Object.keys(user?.progress || {}).length,
+    averageScore: calculateAverageScore(user?.progress || {}),
+    totalQuizzes: calculateTotalQuizzes(user?.progress || {})
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -24,230 +25,109 @@ const Profile = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
-
-    // Validate passwords if changing
-    if (formData.newPassword) {
-      if (formData.newPassword !== formData.confirmPassword) {
-        setError('New passwords do not match');
-        return;
-      }
-      if (formData.currentPassword !== user.password) {
-        setError('Current password is incorrect');
-        return;
-      }
-    }
-
-    // Get all users
-    const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
-    
-    // If email is changed, check if new email already exists
-    if (formData.email !== user.email && users[formData.email]) {
-      setError('Email already in use');
-      return;
-    }
-
-    // Create updated user object
-    const updatedUser = {
-      ...user,
-      name: formData.name,
-      email: formData.email,
-      employeeId: formData.employeeId,
-      password: formData.newPassword || user.password
-    };
-
-    // If email changed, remove old email entry and add new one
-    if (formData.email !== user.email) {
-      delete users[user.email];
-    }
-    users[updatedUser.email] = updatedUser;
-
-    // Update localStorage
-    localStorage.setItem('marsUsers', JSON.stringify(users));
-    localStorage.setItem('marsCurrentUser', JSON.stringify(updatedUser));
-
-    setSuccess('Profile updated successfully');
-    setIsEditing(false);
-    
-    // Reset password fields
-    setFormData(prev => ({
-      ...prev,
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    }));
-
-    // Reload page after 1 second to reflect changes
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+    // Update user profile logic here
   };
 
   return (
-    <div className="container py-8 max-w-2xl mx-auto">
-      <div className="bg-white rounded-lg shadow-lg p-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Profile</h1>
-          <button 
-            onClick={() => setIsEditing(!isEditing)}
-            className="btn btn-outline"
-          >
-            {isEditing ? 'Cancel' : 'Edit Profile'}
-          </button>
+    <div className="profile-container">
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <h2 className="profile-name">{formData.name}</h2>
+          <p className="profile-email">{formData.email}</p>
         </div>
 
-        {isEditing ? (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Employee ID
-              </label>
-              <input
-                type="text"
-                name="employeeId"
-                value={formData.employeeId}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              />
-            </div>
-
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-bold mb-4">Change Password</h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-text-light mb-1">
-                    Current Password
-                  </label>
-                  <input
-                    type="password"
-                    name="currentPassword"
-                    value={formData.currentPassword}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-text-light mb-1">
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    name="newPassword"
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    minLength={6}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-text-light mb-1">
-                    Confirm New Password
-                  </label>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    minLength={6}
-                  />
-                </div>
+        <div className="profile-content">
+          <div className="profile-section">
+            <h3 className="section-title">Learning Progress</h3>
+            <div className="profile-stats">
+              <div className="stat-card">
+                <div className="stat-value">{stats.coursesCompleted}</div>
+                <div className="stat-label">Courses Completed</div>
               </div>
-            </div>
-
-            {error && (
-              <div className="text-error text-sm text-center">
-                {error}
+              <div className="stat-card">
+                <div className="stat-value">{stats.averageScore}%</div>
+                <div className="stat-label">Average Score</div>
               </div>
-            )}
-
-            {success && (
-              <div className="text-success text-sm text-center">
-                {success}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full btn btn-primary"
-            >
-              Save Changes
-            </button>
-          </form>
-        ) : (
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Name
-              </label>
-              <div className="font-medium text-lg">{user.name}</div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Email
-              </label>
-              <div className="font-medium text-lg">{user.email}</div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Employee ID
-              </label>
-              <div className="font-medium text-lg">{user.employeeId}</div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Account Status
-              </label>
-              <div className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-success bg-opacity-10 text-success">
-                Active
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text-light mb-1">
-                Courses Enrolled
-              </label>
-              <div className="font-medium text-lg">
-                {Object.keys(user.progress || {}).length} courses
+              <div className="stat-card">
+                <div className="stat-value">{stats.totalQuizzes}</div>
+                <div className="stat-label">Quizzes Taken</div>
               </div>
             </div>
           </div>
-        )}
+
+          <div className="profile-section">
+            <h3 className="section-title">Profile Information</h3>
+            <form className="profile-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  disabled
+                />
+              </div>
+              <div className="form-group">
+                <label>Company</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  placeholder="Enter your company"
+                />
+              </div>
+              <div className="form-group">
+                <label>Role</label>
+                <input
+                  type="text"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  placeholder="Enter your role"
+                />
+              </div>
+
+              <div className="profile-actions">
+                <button type="submit" className="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
+function calculateAverageScore(progress) {
+  const scores = Object.values(progress).map(quiz => 
+    (quiz.score / quiz.totalQuestions) * 100
+  );
+  if (scores.length === 0) return 0;
+  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+}
+
+function calculateTotalQuizzes(progress) {
+  return Object.keys(progress).length;
+}
 
 export default Profile;
