@@ -6,7 +6,7 @@ const CourseView = ({ course }) => {
   const navigate = useNavigate();
   const category = courseCategories[course.category];
 
-  const handleCardClick = () => {
+  const handleClick = () => {
     if (course.modules && course.modules.length > 0 && course.modules[0].quizzes && course.modules[0].quizzes.length > 0) {
       const moduleId = course.modules[0].id;
       const quizId = course.modules[0].quizzes[0].id;
@@ -15,7 +15,14 @@ const CourseView = ({ course }) => {
   };
 
   return (
-    <div className="course-card" onClick={handleCardClick} role="button" tabIndex={0}>
+    <div 
+      className="course-card" 
+      onClick={handleClick}
+      onKeyPress={(e) => e.key === 'Enter' && handleClick()}
+      role="button"
+      tabIndex={0}
+      style={{ cursor: 'pointer' }}
+    >
       <div 
         className="course-card-header"
         style={{ background: category.gradient }}
