@@ -26,39 +26,41 @@ const Dashboard = ({ courses, userProgress }) => {
   return (
     <div className="dashboard">
       <aside className="dashboard-sidebar">
-        <div className="mb-4 font-bold text-lg">Categories</div>
-        <nav className="flex flex-col space-y-2">
-          <button
-            className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
-              ${!selectedCategory 
-                ? 'bg-primary bg-opacity-10 text-primary border-primary' 
-                : 'border-transparent hover:bg-gray-50'
-              }
-            `}
-            onClick={() => setSelectedCategory(null)}
-          >
-            All Courses
-          </button>
-          {Object.entries(courseCategories).map(([id, category]) => (
+        <div className="mb-6">
+          <h2 className="text-lg font-bold mb-4">Categories</h2>
+          <nav className="space-y-2">
             <button
-              key={id}
-              onClick={() => handleCategoryClick(id)}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
-                ${selectedCategory === id 
-                  ? 'bg-opacity-10 border-current' 
+                ${!selectedCategory 
+                  ? 'bg-primary bg-opacity-10 text-primary border-primary' 
                   : 'border-transparent hover:bg-gray-50'
                 }
               `}
-              style={{
-                backgroundColor: selectedCategory === id ? `${category.color}20` : '',
-                color: selectedCategory === id ? category.color : 'var(--color-text-primary)',
-                borderColor: selectedCategory === id ? category.color : 'transparent'
-              }}
+              onClick={() => setSelectedCategory(null)}
             >
-              {category.name}
+              All Courses
             </button>
-          ))}
-        </nav>
+            {Object.entries(courseCategories).map(([id, category]) => (
+              <button
+                key={id}
+                onClick={() => handleCategoryClick(id)}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 border-2
+                  ${selectedCategory === id 
+                    ? 'bg-opacity-10 border-current' 
+                    : 'border-transparent hover:bg-gray-50'
+                  }
+                `}
+                style={{
+                  backgroundColor: selectedCategory === id ? `${category.color}20` : '',
+                  color: selectedCategory === id ? category.color : 'var(--color-text-primary)',
+                  borderColor: selectedCategory === id ? category.color : 'transparent'
+                }}
+              >
+                {category.name}
+              </button>
+            ))}
+          </nav>
+        </div>
       </aside>
 
       <main className="dashboard-main">
