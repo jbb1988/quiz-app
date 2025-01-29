@@ -24,6 +24,15 @@ export const gradients = {
   warning: 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)'
 };
 
+// Course category gradients
+export const courseGradients = {
+  software: 'linear-gradient(135deg, #0088cc 0%, #0066cc 100%)',
+  hardware: 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)',
+  company: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)',
+  mcc: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+  sales: 'linear-gradient(135deg, #f1c40f 0%, #f39c12 100%)'
+};
+
 // Shadows
 export const shadows = {
   small: '0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -36,30 +45,6 @@ export const transitions = {
   default: 'all 0.2s ease',
   slow: 'all 0.3s ease',
   fast: 'all 0.1s ease'
-};
-
-// Course category styles
-export const courseCategories = {
-  software: {
-    gradient: gradients.primary,
-    color: colors.white
-  },
-  hardware: {
-    gradient: 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)',
-    color: colors.white
-  },
-  company: {
-    gradient: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)',
-    color: colors.white
-  },
-  mcc: {
-    gradient: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
-    color: colors.white
-  },
-  sales: {
-    gradient: 'linear-gradient(135deg, #f1c40f 0%, #f39c12 100%)',
-    color: colors.dark
-  }
 };
 
 // LOCKED DESIGN ELEMENTS - DO NOT MODIFY

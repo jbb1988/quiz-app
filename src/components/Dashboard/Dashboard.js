@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courses } from '../../data/courses';
+import { courseGradients } from '../../styles/theme';
 import '../../styles/components/Dashboard.css';
 
 const Dashboard = () => {
@@ -39,7 +40,7 @@ const Dashboard = () => {
       <div className="course-grid">
         {filteredCourses.map(course => (
           <div key={course.id} className="course-card">
-            <div className="course-header" style={{ background: `var(--gradient-${course.category})` }}>
+            <div className="course-header" style={{ background: courseGradients[course.category] }}>
               <h2>{course.title}</h2>
               {course.description && <p>{course.description}</p>}
             </div>
