@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
 import { allCourses } from '../../data/courses';
+import '../../styles/components/Progress.css';
 
 const Progress = ({ userProgress }) => {
   const navigate = useNavigate();
@@ -30,10 +31,12 @@ const Progress = ({ userProgress }) => {
   };
 
   return (
-    <div className="container py-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">My Progress</h1>
+    <div className="progress-container">
+      <div className="progress-header">
+        <h1>My Progress</h1>
+      </div>
       
-      <div className="grid grid-cols-1 gap-6">
+      <div className="progress-grid">
         {Object.entries(allCourses).map(([courseId, course]) => {
           const progress = calculateCourseProgress(courseId);
           const category = courseCategories[course.category];
@@ -44,46 +47,48 @@ const Progress = ({ userProgress }) => {
                 className="progress-card-header"
                 style={{ background: category.gradient }}
               >
-                <h2 className="text-xl font-bold text-white mb-1">{course.title}</h2>
-                <div className="text-white opacity-90">{category.name}</div>
+                <h2>{course.title}</h2>
+                <div>{category.name}</div>
               </div>
 
               <div className="progress-card-body">
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="text-sm text-text-light mb-1">Completed</div>
-                    <div className="text-lg font-bold">
+                <div className="progress-stats">
+                  <div className="stat-box">
+                    <div className="stat-label">Completed</div>
+                    <div className="stat-value">
                       {progress.completed}/{progress.total}
                     </div>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="text-sm text-text-light mb-1">Average Score</div>
-                    <div className="text-lg font-bold">
+                  <div className="stat-box">
+                    <div className="stat-label">Average Score</div>
+                    <div className="stat-value">
                       {progress.averageScore.toFixed(1)}%
                     </div>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="text-sm text-text-light mb-1">Status</div>
-                    <div className="text-lg font-bold">
+                  <div className="stat-box">
+                    <div className="stat-label">Status</div>
+                    <div className="stat-value">
                       {progress.completed === progress.total ? 'Complete' : 'In Progress'}
                     </div>
                   </div>
                 </div>
 
-                <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden mb-6">
-                  <div 
-                    className="absolute top-0 left-0 h-full transition-all duration-500 rounded-full"
-                    style={{ 
-                      width: `${progress.percentage}%`,
-                      background: category.gradient
-                    }}
-                  />
+                <div className="progress-bar-container">
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill"
+                      style={{ 
+                        width: `${progress.percentage}%`,
+                        background: category.gradient
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {userProgress[courseId] && (
-                  <div>
-                    <h3 className="text-lg font-bold mb-3">Recent Activity</h3>
-                    <div className="space-y-2">
+                  <div className="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <div className="activity-list">
                       {Object.entries(userProgress[courseId])
                         .sort((a, b) => new Date(b[1].completedAt) - new Date(a[1].completedAt))
                         .slice(0, 3)
@@ -93,21 +98,18 @@ const Progress = ({ userProgress }) => {
                             .find(q => q.id === quizId);
 
                           return quizDetails ? (
-                            <div 
-                              key={quizId}
-                              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                            >
-                              <div>
-                                <div className="font-medium">{quizDetails.title}</div>
-                                <div className="text-sm text-text-light">
+                            <div key={quizId} className="activity-item">
+                              <div className="activity-info">
+                                <div className="activity-title">{quizDetails.title}</div>
+                                <div className="activity-date">
                                   {new Date(quiz.completedAt).toLocaleDateString()}
                                 </div>
                               </div>
-                              <div className="text-right">
-                                <div className="font-bold">
+                              <div className="activity-score">
+                                <div className="activity-score-value">
                                   {((quiz.score / quiz.totalQuestions) * 100).toFixed(1)}%
                                 </div>
-                                <div className="text-sm text-text-light">
+                                <div className="activity-score-details">
                                   {quiz.score}/{quiz.totalQuestions} correct
                                 </div>
                               </div>
@@ -120,7 +122,7 @@ const Progress = ({ userProgress }) => {
               </div>
 
               <div className="progress-card-footer">
-                <div className="text-sm text-text-light">
+                <div className="progress-text">
                   Overall Progress: {progress.percentage.toFixed(1)}%
                 </div>
                 <button 
