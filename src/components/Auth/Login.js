@@ -26,10 +26,6 @@ const Login = ({ onLogin }) => {
     }
   };
 
-  const handleRegister = () => {
-    navigate('/register');
-  };
-
   return (
     <div className="auth-form-container">
       <div className="auth-form">
@@ -38,7 +34,7 @@ const Login = ({ onLogin }) => {
           <p className="text-text-light">Sign in to continue your training</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Email
@@ -77,7 +73,7 @@ const Login = ({ onLogin }) => {
           
           <button
             type="submit"
-            className="btn btn-primary w-full py-3"
+            className="btn btn-primary"
           >
             Sign In
           </button>
@@ -86,8 +82,8 @@ const Login = ({ onLogin }) => {
         <div className="mt-8 text-center">
           <p className="text-text-light mb-4">Don't have an account?</p>
           <button
-            onClick={handleRegister}
-            className="btn btn-outline w-full"
+            onClick={() => navigate('/register')}
+            className="btn btn-outline"
           >
             Create Account
           </button>

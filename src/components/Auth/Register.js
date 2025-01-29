@@ -66,7 +66,7 @@ const Register = ({ onRegister }) => {
           <p className="text-text-light">Join MARS Learning to start your training</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="block text-sm font-medium text-text-secondary mb-2">
               Full Name
@@ -144,7 +144,7 @@ const Register = ({ onRegister }) => {
           
           <button
             type="submit"
-            className="btn btn-primary w-full py-3"
+            className="btn btn-primary"
           >
             Create Account
           </button>
@@ -154,7 +154,7 @@ const Register = ({ onRegister }) => {
           <p className="text-text-light mb-4">Already have an account?</p>
           <button
             onClick={() => navigate('/login')}
-            className="btn btn-outline w-full"
+            className="btn btn-outline"
           >
             Sign In
           </button>
