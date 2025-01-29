@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500">
+  <g>
+    <!-- MARS text -->
+    <path d="M0 0h300v100H0z" fill="#000"/>
+    <text x="20" y="80" font-family="Arial Black" font-size="120" fill="#000">MARS</text>
+    
+    <!-- COMPANY text -->
+    <text x="20" y="180" font-family="Arial" font-size="80" fill="#666">COMPANY</text>
+    
+    <!-- Blue droplet icon -->
+    <g transform="translate(1000, 0)">
+      <circle cx="250" cy="250" r="240" fill="#008ACC"/>
+      <path d="M250 10 L460 300 A240 240 0 1 1 40 300 Z" fill="#fff"/>
+      <path d="M250 50 L420 280 A200 200 0 1 1 80 280 Z" fill="#008ACC"/>
+    </g>
+  </g>
+</svg>
