@@ -41,9 +41,7 @@ const Layout = ({ children }) => {
 
   const handleNavigation = (path) => {
     setMenuOpen(false);
-    // Ensure path starts with /quiz-app for GitHub Pages
-    const fullPath = `/quiz-app${path}`;
-    window.location.href = fullPath;
+    navigate(path);
   };
 
   return (
