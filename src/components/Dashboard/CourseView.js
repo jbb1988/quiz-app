@@ -8,12 +8,14 @@ const CourseView = ({ course }) => {
 
   const handleStartQuiz = () => {
     if (course.modules && course.modules.length > 0 && course.modules[0].quizzes && course.modules[0].quizzes.length > 0) {
-      navigate(`/quiz/${course.id}/${course.modules[0].id}/${course.modules[0].quizzes[0].id}`);
+      const moduleId = course.modules[0].id;
+      const quizId = course.modules[0].quizzes[0].id;
+      navigate(`/quiz/${course.id}/${moduleId}/${quizId}`);
     }
   };
 
   return (
-    <div className="course-card">
+    <div className="course-card" onClick={handleStartQuiz}>
       <div 
         className="course-card-header"
         style={{ background: category.gradient }}
@@ -32,7 +34,6 @@ const CourseView = ({ course }) => {
         </div>
         <button 
           className="btn btn-primary"
-          onClick={handleStartQuiz}
           style={{ background: category.gradient }}
         >
           Start
