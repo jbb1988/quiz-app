@@ -49,6 +49,9 @@
   border-radius: 0.5rem;
   transition: all 0.2s ease;
   font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .nav-button i {
@@ -160,6 +163,9 @@
 .side-nav {
   flex-grow: 1;
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .menu-item {
@@ -172,6 +178,11 @@
   border-radius: 0.5rem;
   transition: all 0.2s;
   margin-bottom: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
 }
 
 .menu-item i {
@@ -245,4 +256,26 @@
 
 .main.auth-page {
   padding: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .nav-button span {
+    display: none;
+  }
+
+  .nav-button {
+    padding: 0.75rem;
+  }
+
+  .nav-button i {
+    margin: 0;
+  }
+
+  .user-info {
+    font-size: 0.875rem;
+  }
 }

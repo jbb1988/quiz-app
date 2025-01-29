@@ -31,16 +31,17 @@ const Layout = ({ children }) => {
     navigate('/login');
   };
 
-  const completedCourses = Object.values(user.progress || {}).filter(
-    course => course.completed
-  ).length;
-
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
 
   const handleOverlayClick = () => {
     setMenuOpen(false);
+  };
+
+  const handleNavigation = (path) => {
+    setMenuOpen(false);
+    navigate(path);
   };
 
   return (
@@ -57,14 +58,14 @@ const Layout = ({ children }) => {
               <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
             </button>
             <nav className="top-nav">
-              <Link to="/" className="nav-button">
+              <button onClick={() => handleNavigation('/')} className="nav-button">
                 <i className="fas fa-home"></i>
                 <span>Home</span>
-              </Link>
-              <Link to="/" className="nav-button">
+              </button>
+              <button onClick={() => handleNavigation('/')} className="nav-button">
                 <i className="fas fa-book"></i>
                 <span>Courses</span>
-              </Link>
+              </button>
             </nav>
             <div className="user-info">
               <span>Welcome, {user.name}</span>
@@ -84,12 +85,12 @@ const Layout = ({ children }) => {
               <h4>Your Progress</h4>
               <div className="stats">
                 <div className="stat">
-                  <span className="stat-value">{completedCourses}</span>
+                  <span className="stat-value">{user.progress?.completedCourses || 0}</span>
                   <span className="stat-label">Completed Courses</span>
                 </div>
                 <div className="stat">
                   <span className="stat-value">
-                    {Object.keys(user.progress || {}).length}
+                    {user.progress?.inProgressCourses || 0}
                   </span>
                   <span className="stat-label">Courses in Progress</span>
                 </div>
@@ -97,22 +98,22 @@ const Layout = ({ children }) => {
             </div>
 
             <nav className="side-nav">
-              <Link to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
+              <button onClick={() => handleNavigation('/')} className="menu-item">
                 <i className="fas fa-home"></i>
                 <span>Home</span>
-              </Link>
-              <Link to="/" className="menu-item" onClick={() => setMenuOpen(false)}>
+              </button>
+              <button onClick={() => handleNavigation('/')} className="menu-item">
                 <i className="fas fa-book"></i>
                 <span>Courses</span>
-              </Link>
-              <Link to="/profile" className="menu-item" onClick={() => setMenuOpen(false)}>
+              </button>
+              <button onClick={() => handleNavigation('/profile')} className="menu-item">
                 <i className="fas fa-user"></i>
                 <span>Profile</span>
-              </Link>
-              <Link to="/progress" className="menu-item" onClick={() => setMenuOpen(false)}>
+              </button>
+              <button onClick={() => handleNavigation('/progress')} className="menu-item">
                 <i className="fas fa-chart-line"></i>
                 <span>Progress</span>
-              </Link>
+              </button>
             </nav>
 
             <div className="menu-footer">
