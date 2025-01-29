@@ -1,109 +1,95 @@
 import React from 'react';
-import { FaTrophy, FaClock, FaCheckCircle, FaRedo, FaHome } from 'react-icons/fa';
 
-const Results = ({ 
-  score, 
-  totalQuestions, 
-  correctAnswers, 
-  timeBonus, 
-  onRestart, 
-  onFinish 
-}) => {
-  const baseScore = correctAnswers * 100;
-  const percentageCorrect = (correctAnswers / totalQuestions) * 100;
-  
-  const getPerformanceMessage = () => {
-    if (percentageCorrect === 100) return "Perfect Score! Outstanding work!";
-    if (percentageCorrect >= 80) return "Excellent work! Keep it up!";
-    if (percentageCorrect >= 60) return "Good job! Room for improvement.";
-    return "Keep practicing! You'll get better.";
-  };
+const Results = ({ score, totalQuestions, answers, onComplete }) => {
+  const percentage = Math.round((score / (totalQuestions * 3)) * 100);
+  const baseScore = Object.values(answers).filter(a => a.correct).length;
+  const bonusPoints = score - baseScore;
 
   const getGrade = () => {
-    if (percentageCorrect >= 90) return { letter: 'A', color: '#48bb78' };
-    if (percentageCorrect >= 80) return { letter: 'B', color: '#4299e1' };
-    if (percentageCorrect >= 70) return { letter: 'C', color: '#ecc94b' };
-    if (percentageCorrect >= 60) return { letter: 'D', color: '#ed8936' };
-    return { letter: 'F', color: '#f56565' };
+    if (percentage >= 90) return { text: 'Excellent!', color: '#48bb78' };
+    if (percentage >= 80) return { text: 'Great Job!', color: '#4299e1' };
+    if (percentage >= 70) return { text: 'Good Work!', color: '#ed8936' };
+    return { text: 'Keep Practicing', color: '#f56565' };
   };
 
   const grade = getGrade();
 
   return (
-    <div className="card max-w-2xl mx-auto">
-      <div className="text-center mb-8">
-        <div 
-          className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center"
-          style={{ backgroundColor: grade.color + '20', color: grade.color }}
-        >
-          <FaTrophy className="text-4xl" />
-        </div>
-        <h2 className="text-2xl font-bold mb-2">Quiz Complete!</h2>
-        <p className="text-text-light">{getPerformanceMessage()}</p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="text-center p-4 bg-background rounded-lg">
-          <div className="text-4xl font-bold text-primary mb-2">
-            {grade.letter}
-          </div>
-          <div className="text-text-light">Grade</div>
-        </div>
-        <div className="text-center p-4 bg-background rounded-lg">
-          <div className="text-4xl font-bold text-primary mb-2">
-            {Math.round(percentageCorrect)}%
-          </div>
-          <div className="text-text-light">Accuracy</div>
-        </div>
-      </div>
-
-      <div className="space-y-4 mb-8">
-        <div className="flex justify-between items-center p-4 bg-background rounded-lg">
-          <div className="flex items-center">
-            <FaCheckCircle className="text-primary mr-3" />
-            <span>Correct Answers</span>
-          </div>
-          <div className="font-bold">
-            {correctAnswers} of {totalQuestions}
-          </div>
-        </div>
+    <div className="container max-w-2xl mx-auto py-8">
+      <div className="card text-center">
+        <h1 className="text-3xl font-bold mb-8">Quiz Complete!</h1>
         
-        <div className="flex justify-between items-center p-4 bg-background rounded-lg">
-          <div className="flex items-center">
-            <FaTrophy className="text-primary mr-3" />
-            <span>Base Score</span>
+        <div className="mb-8">
+          <div 
+            className="text-5xl font-bold mb-2"
+            style={{ color: grade.color }}
+          >
+            {grade.text}
           </div>
-          <div className="font-bold">{baseScore} points</div>
-        </div>
-
-        <div className="flex justify-between items-center p-4 bg-background rounded-lg">
-          <div className="flex items-center">
-            <FaClock className="text-primary mr-3" />
-            <span>Time Bonus</span>
+          <div className="text-xl text-text-light">
+            Your Score: {score} / {totalQuestions * 3} ({percentage}%)
           </div>
-          <div className="font-bold">+{timeBonus} points</div>
         </div>
 
-        <div className="flex justify-between items-center p-4 bg-primary text-white rounded-lg">
-          <div className="font-bold">Total Score</div>
-          <div className="text-2xl font-bold">{score} points</div>
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="p-4 bg-background-light rounded-lg">
+            <div className="text-2xl font-bold text-primary mb-1">
+              {baseScore}
+            </div>
+            <div className="text-sm text-text-light">
+              Correct Answers
+            </div>
+          </div>
+          <div className="p-4 bg-background-light rounded-lg">
+            <div className="text-2xl font-bold text-primary mb-1">
+              {bonusPoints}
+            </div>
+            <div className="text-sm text-text-light">
+              Time Bonus Points
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="flex justify-center gap-4">
+        <div className="mb-8">
+          <h2 className="text-xl font-bold mb-4">Question Summary</h2>
+          <div className="space-y-4">
+            {Object.entries(answers).map(([index, answer]) => (
+              <div 
+                key={index}
+                className={`p-4 rounded-lg ${
+                  answer.correct 
+                    ? 'bg-success-light text-success-dark' 
+                    : 'bg-error-light text-error-dark'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-medium">Question {Number(index) + 1}</div>
+                  <div className="text-sm">
+                    {answer.correct ? (
+                      <span>
+                        +1 {answer.timeBonus > 0 && `(+${answer.timeBonus} bonus)`}
+                      </span>
+                    ) : (
+                      <span>+0</span>
+                    )}
+                  </div>
+                </div>
+                <div className="text-sm opacity-75">
+                  {answer.correct ? 'Correct' : 'Incorrect'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <button 
-          className="btn btn-outline flex items-center gap-2"
-          onClick={onRestart}
+          onClick={onComplete}
+          className="btn btn-primary w-full"
+          style={{
+            background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)'
+          }}
         >
-          <FaRedo />
-          Try Again
-        </button>
-        <button 
-          className="btn btn-primary flex items-center gap-2"
-          onClick={onFinish}
-        >
-          <FaHome />
-          Back to Courses
+          Back to Course
         </button>
       </div>
     </div>
