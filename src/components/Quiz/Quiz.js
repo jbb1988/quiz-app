@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { allCourses } from '../../data/courses';
-import Question from './Question';
-import Results from './Results';
+import { courses, getCourseById } from '../../data/courses';
 import Timer from './Timer';
 import '../../styles/components/Quiz.css';
 
-const Quiz = ({ user }) => {
+const Quiz = () => {
   const { courseId, moduleId, quizId } = useParams();
   const navigate = useNavigate();
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [quizComplete, setQuizComplete] = useState(false);
-  const [timeExpired, setTimeExpired] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [score, setScore] = useState(0);
+  const [timeUp, setTimeUp] = useState(false);
 
-  const course = allCourses[courseId];
+  const course = getCourseById(courseId);
   const module = course?.modules.find(m => m.id === moduleId);
   const quiz = module?.quizzes.find(q => q.id === quizId);
   const questions = quiz?.questions || [];
@@ -25,101 +24,115 @@ const Quiz = ({ user }) => {
     }
   }, [course, module, quiz, navigate]);
 
-  const handleAnswer = (answer) => {
-    const newAnswers = [...answers, answer];
-    setAnswers(newAnswers);
-
-    // Add a delay to show feedback before moving to next question
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      } else {
-        completeQuiz(newAnswers);
+  const handleAnswerSelect = (answerIndex) => {
+    if (selectedAnswer === null && !timeUp) {
+      setSelectedAnswer(answerIndex);
+      if (answerIndex === questions[currentQuestion].correctAnswer) {
+        setScore(score + 1);
       }
-    }, 1500);
+    }
   };
 
-  const handleTimeExpired = () => {
-    setTimeExpired(true);
-    completeQuiz(answers);
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedAnswer(null);
+    } else {
+      setShowResult(true);
+    }
   };
 
-  const completeQuiz = (finalAnswers) => {
-    const score = finalAnswers.reduce((total, answer, index) => {
-      return total + (answer === questions[index].correctAnswer ? 1 : 0);
-    }, 0);
-
-    const progress = {
-      ...user.progress,
-      [courseId]: {
-        ...(user.progress?.[courseId] || {}),
-        [quizId]: {
-          score,
-          totalQuestions: questions.length,
-          completedAt: new Date().toISOString()
-        }
-      }
-    };
-
-    const updatedUser = {
-      ...user,
-      progress
-    };
-
-    localStorage.setItem('marsCurrentUser', JSON.stringify(updatedUser));
-    const users = JSON.parse(localStorage.getItem('marsUsers') || '{}');
-    users[user.email] = updatedUser;
-    localStorage.setItem('marsUsers', JSON.stringify(users));
-
-    setQuizComplete(true);
+  const handleTimeUp = () => {
+    setTimeUp(true);
+    if (selectedAnswer === null) {
+      handleNext();
+    }
   };
 
-  if (!course || !module || !quiz) {
-    return null;
-  }
+  const handleRetry = () => {
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setScore(0);
+    setTimeUp(false);
+  };
 
-  if (quizComplete || timeExpired) {
+  const handleBackToCourses = () => {
+    navigate('/');
+  };
+
+  if (!quiz) return null;
+
+  if (showResult) {
+    const percentage = Math.round((score / questions.length) * 100);
     return (
-      <Results
-        score={answers.reduce((total, answer, index) => {
-          return total + (answer === questions[index].correctAnswer ? 1 : 0);
-        }, 0)}
-        totalQuestions={questions.length}
-        timeExpired={timeExpired}
-        onRetry={() => {
-          setCurrentQuestionIndex(0);
-          setAnswers([]);
-          setQuizComplete(false);
-          setTimeExpired(false);
-        }}
-        onExit={() => navigate('/')}
-      />
+      <div className="quiz-container">
+        <div className="quiz-result">
+          <h2>Quiz Complete!</h2>
+          <div className="score-circle">
+            <div className="score-value">{percentage}%</div>
+            <div className="score-label">Score</div>
+          </div>
+          <div className="score-details">
+            <div className="stat">
+              <div className="stat-value">{score}</div>
+              <div className="stat-label">Correct Answers</div>
+            </div>
+            <div className="stat">
+              <div className="stat-value">{questions.length}</div>
+              <div className="stat-label">Total Questions</div>
+            </div>
+          </div>
+          <div className="action-buttons">
+            <button onClick={handleRetry} className="retry-button">
+              Try Again
+            </button>
+            <button onClick={handleBackToCourses} className="back-button">
+              Back to Courses
+            </button>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
     <div className="quiz-container">
       <div className="quiz-header">
-        <h2 className="quiz-title">{quiz.title}</h2>
-        <div className="quiz-progress">
-          <div className="progress-bar">
-            <div
-              className="progress-fill"
-              style={{
-                width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
-              }}
-            />
-          </div>
-          <Timer duration={60} onTimeExpired={handleTimeExpired} />
+        <h2>{quiz.title}</h2>
+        <Timer duration={30} onTimeUp={handleTimeUp} />
+      </div>
+      <div className="question-section">
+        <div className="question-count">
+          Question {currentQuestion + 1} of {questions.length}
+        </div>
+        <div className="question-text">
+          {questions[currentQuestion].text}
         </div>
       </div>
-
-      <Question
-        question={questions[currentQuestionIndex]}
-        onAnswer={handleAnswer}
-        number={currentQuestionIndex + 1}
-        total={questions.length}
-      />
+      <div className="answer-section">
+        {questions[currentQuestion].options.map((option, index) => (
+          <button
+            key={index}
+            className={`answer-button ${
+              selectedAnswer === index
+                ? index === questions[currentQuestion].correctAnswer
+                  ? 'correct'
+                  : 'incorrect'
+                : ''
+            } ${selectedAnswer !== null || timeUp ? 'disabled' : ''}`}
+            onClick={() => handleAnswerSelect(index)}
+            disabled={selectedAnswer !== null || timeUp}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+      {(selectedAnswer !== null || timeUp) && (
+        <button onClick={handleNext} className="next-button">
+          {currentQuestion === questions.length - 1 ? 'Finish' : 'Next'}
+        </button>
+      )}
     </div>
   );
 };
