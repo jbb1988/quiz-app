@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courseCategories } from '../../styles/theme';
+import '../../styles/components/Dashboard.css';
 
 const Dashboard = ({ courses, userProgress }) => {
   const navigate = useNavigate();

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Timer from './Timer';
+import '../../styles/components/Quiz.css';
 
 const Quiz = ({ quiz, courseName, onComplete }) => {
   const navigate = useNavigate();
@@ -51,30 +52,30 @@ const Quiz = ({ quiz, courseName, onComplete }) => {
     const percentage = (totalScore / quiz.questions.length) * 100;
     
     return (
-      <div className="container py-8 max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
+      <div className="quiz-container">
+        <div className="quiz-results">
           <h1 className="text-2xl font-bold mb-6 text-center">Quiz Complete!</h1>
           <div className="text-center mb-8">
-            <p className="text-4xl font-bold text-primary mb-2">{percentage.toFixed(0)}%</p>
-            <p className="text-text-light">Your Score</p>
+            <p className="results-score">{percentage.toFixed(0)}%</p>
+            <p className="results-message">Your Score</p>
           </div>
-          <div className="space-y-4 mb-8">
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span>Correct Answers</span>
-              <span className="font-bold">{score}/{quiz.questions.length}</span>
+          <div className="results-stats">
+            <div className="stat-card">
+              <div className="stat-label">Correct Answers</div>
+              <div className="stat-value">{score}/{quiz.questions.length}</div>
             </div>
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span>Time Bonus Points</span>
-              <span className="font-bold text-primary">+{timeBonus}</span>
+            <div className="stat-card">
+              <div className="stat-label">Time Bonus Points</div>
+              <div className="stat-value text-primary">+{timeBonus}</div>
             </div>
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span>Total Score</span>
-              <span className="font-bold">{totalScore}/{quiz.questions.length}</span>
+            <div className="stat-card">
+              <div className="stat-label">Total Score</div>
+              <div className="stat-value">{totalScore}/{quiz.questions.length}</div>
             </div>
           </div>
           <button 
             onClick={handleFinish}
-            className="w-full btn btn-primary"
+            className="btn btn-primary w-full"
           >
             Return to Dashboard
           </button>
@@ -84,16 +85,16 @@ const Quiz = ({ quiz, courseName, onComplete }) => {
   }
 
   return (
-    <div className="container py-8 max-w-3xl mx-auto">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="p-6 border-b">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-xl font-bold">{quiz.title}</h1>
-            <div className="text-text-light">{courseName}</div>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+    <div className="quiz-container">
+      <div className="quiz-header">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="quiz-title">{quiz.title}</h1>
+          <div className="text-text-light">{courseName}</div>
+        </div>
+        <div className="quiz-progress">
+          <div className="progress-bar">
             <div 
-              className="bg-primary rounded-full h-2 transition-all duration-300"
+              className="progress-fill"
               style={{ width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%` }}
             />
           </div>
@@ -102,36 +103,36 @@ const Quiz = ({ quiz, courseName, onComplete }) => {
             <Timer onComplete={handleTimerComplete} />
           </div>
         </div>
+      </div>
 
-        <div className="p-6">
-          <h2 className="text-xl font-bold mb-6">{currentQuestion.question}</h2>
-          <div className="quiz-options">
-            {currentQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => !showFeedback && handleAnswerSubmit(option)}
-                className={`quiz-option ${
-                  showFeedback
-                    ? option === currentQuestion.correctAnswer
-                      ? 'correct'
-                      : option === currentQuestion.options[index]
-                        ? 'incorrect'
-                        : ''
-                    : ''
-                }`}
-                disabled={showFeedback}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-
-          {showFeedback && (
-            <div className={`quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}`}>
-              {isCorrect ? 'Correct!' : 'Incorrect. The correct answer is: ' + currentQuestion.correctAnswer}
-            </div>
-          )}
+      <div className="quiz-question">
+        <h2 className="question-text">{currentQuestion.question}</h2>
+        <div className="quiz-options">
+          {currentQuestion.options.map((option, index) => (
+            <button
+              key={index}
+              onClick={() => !showFeedback && handleAnswerSubmit(option)}
+              className={`quiz-option ${
+                showFeedback
+                  ? option === currentQuestion.correctAnswer
+                    ? 'correct'
+                    : option === currentQuestion.options[index]
+                      ? 'incorrect'
+                      : ''
+                  : ''
+              }`}
+              disabled={showFeedback}
+            >
+              {option}
+            </button>
+          ))}
         </div>
+
+        {showFeedback && (
+          <div className={`quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}`}>
+            {isCorrect ? 'Correct!' : 'Incorrect. The correct answer is: ' + currentQuestion.correctAnswer}
+          </div>
+        )}
       </div>
     </div>
   );
