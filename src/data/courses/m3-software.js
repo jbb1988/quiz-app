@@ -1,4 +1,4 @@
-export const m3Software = {
+export const m3SoftwareCourse = {
   id: 'm3-software',
   title: 'M3 Software',
   category: 'software',
